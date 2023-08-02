@@ -1,12 +1,11 @@
 <?php
 
 namespace app\controllers;
-
 require_once 'Controller.php';
 
-class ErrorController
+class ErrorController extends Controller
 {
-    public function printErrorPage()
+    public static function printErrorPage()
     {
         echo "error";
         // echo json_encode(['error' => 'Bad Request']);

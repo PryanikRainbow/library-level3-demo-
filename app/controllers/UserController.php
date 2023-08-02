@@ -4,21 +4,21 @@ namespace app\controllers;
 require_once 'Controller.php';
 
 const USER_TEMPLATE_PATH = __DIR__ . '/../../views/';
-#дані має витягувати контролер (до моделей)
+//дані має витягувати контролер (до моделей)
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 class UserController extends Controller
 {
-    public function defineController($action)
+    public static function defineController($action)
     {
         switch ($action) {
             case 'books-page.php':
-                $this->printBooksPage($action);
+                self::printBooksPage($action);
                 break;
             case 'book-page.php':
-                $this -> printBookPage($action);
+                self::printBookPage($action);
                 break;
             default:
                 require_once USER_TEMPLATE_PATH . '/error.php';
@@ -26,7 +26,7 @@ class UserController extends Controller
         }
     }
 
-    public function printBooksPage($action)
+    public static function printBooksPage($action)
     {
         //витягнути з БД
         echo "printBooks";
@@ -35,7 +35,7 @@ class UserController extends Controller
         require_once USER_TEMPLATE_PATH . '/footer.php';
     }
 
-    public function printBookPage($action)
+    public static function printBookPage($action)
     {
         //витягнути з БД
         echo "book";
