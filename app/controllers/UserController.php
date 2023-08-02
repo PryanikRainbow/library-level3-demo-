@@ -1,7 +1,6 @@
 <?php
 
 namespace app\controllers;
-
 require_once 'Controller.php';
 
 const USER_TEMPLATE_PATH = __DIR__ . '/../../views/';
@@ -12,17 +11,17 @@ ini_set('display_errors', 1);
 
 class UserController extends Controller
 {
-    public function get($action)
+    public function defineController($action)
     {
         switch ($action) {
             case 'books-page.php':
                 $this->printBooksPage($action);
                 break;
-            case 'books-page.php':
+            case 'book-page.php':
                 $this -> printBookPage($action);
                 break;
             default:
-                require_once __DIR__ . '/../../views/error.php';
+                require_once USER_TEMPLATE_PATH . '/error.php';
                 break;
         }
     }
@@ -33,16 +32,16 @@ class UserController extends Controller
         echo "printBooks";
         require_once USER_TEMPLATE_PATH . '/header.php';
         require_once USER_TEMPLATE_PATH . '//' . $action;
-        require_once __DIR__ . '/footer.php';
+        require_once USER_TEMPLATE_PATH . '/footer.php';
     }
 
     public function printBookPage($action)
     {
         //витягнути з БД
         echo "book";
-        // require_once __DIR__ . '/../../views/header.php';
-        // require_once __DIR__ . '/../../views/book-page.php';
-        // require_once __DIR__ . '/../../views/footer.php';
+        require_once __DIR__ . '/../../views/header.php';
+        require_once __DIR__ . '/../../views/book-page.php';
+        require_once __DIR__ . '/../../views/footer.php';
     }
 
 }

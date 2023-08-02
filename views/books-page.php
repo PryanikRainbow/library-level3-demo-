@@ -36,7 +36,7 @@
 <!--div id="list" PROCESS SEARCH ANIMATION (GIFF)-->
 <!-- + resd in task-->
 
-<body data-gr-c-s-loaded="true" class="">
+<!-- <body data-gr-c-s-loaded="true" class="">
     <section id="header" class="header-wrapper">
         <nav class="navbar navbar-default">
             <div class="container">
@@ -74,7 +74,7 @@
                 </div>
             </div>
         </nav>
-    </section>
+    </section> -->
 
     <!--Anya:-->
     <!--COLLECTION!-->

@@ -2,46 +2,38 @@
 
 // require_once __DIR__.'/app/controllers/UserController.php';
 require_once 'app/controllers/UserController.php';
+require_once 'app/controllers/ErrorController.php';
 // require_once 'app/controllers/AdminController.php';
-use app\controllers\UserController; // Вірно, якщо UserController.php у директорії app/controllers
+
+use app\controllers\UserController; 
+use app\controllers\ErrorController; 
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-/* інші частини коду */
-
 $requestURI = $_SERVER ['REQUEST_URI' ];
 
-$found = false;
-
 if ($requestURI === "/") {
-    $booksController = new UserController();
-     $booksController->get('books-page.php');
-    // echo $output;
+    $booksController = new UserController('books-page.php');
+     $booksController-> defineController('books-page.php');
 } elseif($requestURI === '/views/book-page.php'){
-    // echo "kjhgh";
     $bookController = new UserController();
-    $bookController->printBookPage();
-//     echo "Request has reached index.php<br>";
-// var_dump($_SERVER['REQUEST_URI']);
-// var_dump($_GET);
+    $bookController->defineController('book-page.php');
 } elseif($requestURI === '/views/error.php'){
-    echo "error!";
-    $bookController = new UserController();
-    $bookController->printBookPage();
+    echo "views error";
+    $errorController = new ErrorController('error.php');
+    $errorController -> printErrorPage();
 } elseif($requestURI === 'test.php'){
-    // echo "error!";
-    $bookController = new UserController();
-    $bookController->printBookPage();
+    require_once 'app/controllers/ErrorController.php';
 } elseif($requestURI === '/admin/a.php'){
    require_once __DIR__.'/app/controllers/AdminController.php';
 }
 else {
-    require_once __DIR__ . '/app/controllers/ErrorController.php';
+    echo 'else';
+    $errorController = new ErrorController('error.php');
+    $errorController -> printErrorPage();
 }
 // echo __FILE__;
-
-
 
 
 /* request routing */
