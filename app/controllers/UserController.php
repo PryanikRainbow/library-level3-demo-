@@ -26,7 +26,7 @@ class UserController extends Controller
         }
     }
 
-    public static function printBooksPage($action)
+    private static function printBooksPage($action)
     {
         //витягнути з БД
         echo "printBooks";
@@ -35,7 +35,7 @@ class UserController extends Controller
         require_once USER_TEMPLATE_PATH . '/footer.php';
     }
 
-    public static function printBookPage($action)
+    private static function printBookPage($action)
     {
         //витягнути з БД
         echo "book";
