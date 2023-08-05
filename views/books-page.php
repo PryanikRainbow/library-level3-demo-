@@ -3,12 +3,6 @@
 <!-- saved from url=(0054)file:///home/andy/Desktop/books-page/shpp-library.html -->
 <html lang="ru">
 
-<head>
-    <title>Назва вашої сторінки</title>
-    <!-- Мета-теги, стилі та інші ресурси -->
-</head>
-
-
     <section id="main" class="main-wrapper">
         <div class="container">
             <div id="content" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
