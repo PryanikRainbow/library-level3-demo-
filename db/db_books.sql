@@ -1,6 +1,6 @@
-CREATE DATABASE IF NOT EXISTS `library_test`;
+CREATE DATABASE IF NOT EXISTS `library`;
 
-USE `library_test`;
+USE `library`;
 
 CREATE TABLE IF NOT EXISTS `books` (
   `id` INT AUTO_INCREMENT PRIMARY KEY,
