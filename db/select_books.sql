@@ -1,0 +1,1 @@
+SELECT id, img, title, author FROM books LIMIT 16;

@@ -7,10 +7,23 @@ use app\models\ConnectDB;
 
 // const DEFAULT_COUNT_BOOKS = 20;
 
-function getDataBooks(){
+function getDataBooks()
+{
     $db = ConnectDB::getInstance();
     $dataBooks = $db->query(file_get_contents(__DIR__ . '/../../db/select_books.sql'));
-    return $dataBooks;
+
+    $dataBooksArray = [];
+
+    while($row = $dataBooks->fetch_assoc()) {
+        //в масив додаємо масив асоціативних масивів(або пар)
+        $dataBooksArray[] = [
+            "img" => $row["img"],
+            "title" => $row["title"],
+            "author" => $row["author"]
+        ];
+    }
+
+    return $dataBooksArray;
 };
 
 // $dataBooks = getDataBooks();

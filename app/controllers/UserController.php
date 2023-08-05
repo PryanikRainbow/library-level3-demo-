@@ -4,8 +4,10 @@ namespace app\controllers;
 
 use function app\models\getDataBooks;
 
+require_once __DIR__ . '/../../includes/render.php';
 require_once 'Controller.php';
 require __DIR__ . '/../models/BooksModel.php';
+
 const USER_TEMPLATE_PATH = __DIR__ . '/../../views/';
 //дані має витягувати контролер (до моделей)
 
@@ -30,38 +32,21 @@ class UserController extends Controller
     }
 
     private static function printBooksPage($action)
-{
-    //витягнути з БД
-    echo "printBooks";
-    require_once USER_TEMPLATE_PATH . '/header.php';
+    {
+        //витягнути з БД
+        echo "printBooks";
+        require_once USER_TEMPLATE_PATH . '/header.php';
 
-    // Зчитуємо вміст файлу books-page.php
-    $templateOrigin = file_get_contents(USER_TEMPLATE_PATH . '/' . $action);
-    $dataBooks = getDataBooks();
+        // Зчитуємо вміст файлу books-page.php
+        // $templateOrigin = file_get_contents(USER_TEMPLATE_PATH . '/' . $action);
+        $dataBooks = getDataBooks();
 
-    // Замінна для накопичення контенту
-    $allBooksContent = '';
+        render(USER_TEMPLATE_PATH . '/' . $action, $dataBooks);
+        // Вивести весь вміст сторінки з вставленими книгами
+        // echo $templateOrigin;
 
-    while ($row = $dataBooks->fetch_assoc()) {
-        $bookTemplate = $templateOrigin;
-
-        // Замінюємо мітки в шаблоні на дані з БД
-        $bookTemplate = str_replace('{{book_image}}', $row['img'], $bookTemplate);
-        $bookTemplate = str_replace('{{book_title}}', $row['title'], $bookTemplate);
-        $bookTemplate = str_replace('{{book_author}}', $row['author'], $bookTemplate);
-
-        // Додати згенерований контент до змінної
-        $allBooksContent .= $bookTemplate;
+        require_once USER_TEMPLATE_PATH . '/footer.php';
     }
-
-    // Заміна мітки {{books}} в шаблоні на всі книги
-    $templateOrigin = str_replace('{{books}}', $allBooksContent, $templateOrigin);
-
-    // Вивести весь вміст сторінки з вставленими книгами
-    echo $templateOrigin;
-
-    require_once USER_TEMPLATE_PATH . '/footer.php';
-}
 
     // private static function printBooksPage($action)
     // {
@@ -76,15 +61,15 @@ class UserController extends Controller
     //     while ($row = $dataBooks->fetch_assoc()) {
     //         echo 'j';
     //         $bookTemplate = $templateOrigin;  // Копіюємо шаблон для кожної книги
-    
+
     //         // Замінюємо мітки в шаблоні на дані з БД
     //         $bookTemplate = str_replace('{{book_image}}', $row['img'], $bookTemplate);
     //         $bookTemplate = str_replace('{{book_title}}', $row['title'], $bookTemplate);
     //         $bookTemplate = str_replace('{{book_author}}', $row['author'], $bookTemplate);
-    
+
     //         echo $bookTemplate;
     //     }
-    
+
     //     // require_once USER_TEMPLATE_PATH . '//' . $action;
     //     require_once USER_TEMPLATE_PATH . '/footer.php';
     // }
