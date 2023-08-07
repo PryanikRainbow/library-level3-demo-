@@ -2,11 +2,17 @@
 
 namespace app\controllers;
 
+use function app\models\getDataBook;
 use function app\models\getDataBooks;
 
 require_once __DIR__ . '/../../includes/render.php';
 require_once 'Controller.php';
 require __DIR__ . '/../models/BooksModel.php';
+require __DIR__ . '/../models/BookModel.php';
+
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 const USER_TEMPLATE_PATH = __DIR__ . '/../../views/';
 //дані має витягувати контролер (до моделей)
@@ -16,71 +22,46 @@ ini_set('display_errors', 1);
 
 class UserController extends Controller
 {
-    public static function defineController($action)
+    public function defineController($action, $id = null)
     {
         switch ($action) {
             case 'books-page.php':
-                self::printBooksPage($action);
+                $this -> printBooksPage($action);
                 break;
             case 'book-page.php':
-                self::printBookPage($action);
+                $this -> printBookPage($action, $id);
                 break;
             default:
-                require_once USER_TEMPLATE_PATH . '/error.php';
+                render(USER_TEMPLATE_PATH . '/error.php');
                 break;
         }
     }
 
-    private static function printBooksPage($action)
+    private function printBooksPage($action)
     {
         //витягнути з БД
         echo "printBooks";
-        require_once USER_TEMPLATE_PATH . '/header.php';
+        render(USER_TEMPLATE_PATH . '/header.php');
 
-        // Зчитуємо вміст файлу books-page.php
-        // $templateOrigin = file_get_contents(USER_TEMPLATE_PATH . '/' . $action);
         $dataBooks = getDataBooks();
-
         render(USER_TEMPLATE_PATH . '/' . $action, $dataBooks);
-        // Вивести весь вміст сторінки з вставленими книгами
-        // echo $templateOrigin;
 
-        require_once USER_TEMPLATE_PATH . '/footer.php';
+        render(USER_TEMPLATE_PATH . '/footer.php');
     }
 
-    // private static function printBooksPage($action)
-    // {
-    //     //витягнути з БД
-    //     echo "printBooks";
-    //     require_once USER_TEMPLATE_PATH . '/header.php';
-
-    //     $templateOrigin = file_get_contents(USER_TEMPLATE_PATH . '/' . $action);
-    //     $dataBooks = getDataBooks();
-    //     // echo $dataBooks();
-
-    //     while ($row = $dataBooks->fetch_assoc()) {
-    //         echo 'j';
-    //         $bookTemplate = $templateOrigin;  // Копіюємо шаблон для кожної книги
-
-    //         // Замінюємо мітки в шаблоні на дані з БД
-    //         $bookTemplate = str_replace('{{book_image}}', $row['img'], $bookTemplate);
-    //         $bookTemplate = str_replace('{{book_title}}', $row['title'], $bookTemplate);
-    //         $bookTemplate = str_replace('{{book_author}}', $row['author'], $bookTemplate);
-
-    //         echo $bookTemplate;
-    //     }
-
-    //     // require_once USER_TEMPLATE_PATH . '//' . $action;
-    //     require_once USER_TEMPLATE_PATH . '/footer.php';
-    // }
-
-    private static function printBookPage($action)
+    private function printBookPage($action, $id)
     {
-        //витягнути з БД
+        //спробувати витягнути з БД парам. Якщо не вийде, помилку
         echo "book";
-        require_once __DIR__ . '/../../views/header.php';
-        require_once __DIR__ . '/../../views/book-page.php';
-        require_once __DIR__ . '/../../views/footer.php';
+        $data = getDataBook($id);
+        if ($data != false) {
+            render(USER_TEMPLATE_PATH . '/header.php');
+            render(USER_TEMPLATE_PATH . $action, $data);
+            render(USER_TEMPLATE_PATH . '/footer.php');
+        } else {
+            // echo "not found!";
+            render(USER_TEMPLATE_PATH . '/error.php');
+        }
     }
 
 }

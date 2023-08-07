@@ -5,6 +5,9 @@ namespace app\models;
 require_once __DIR__ . '/ConnectDB.php';
 use app\models\ConnectDB;
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 // const DEFAULT_COUNT_BOOKS = 20;
 
 function getDataBooks()
@@ -17,6 +20,7 @@ function getDataBooks()
     while($row = $dataBooks->fetch_assoc()) {
         //в масив додаємо масив асоціативних масивів(або пар)
         $dataBooksArray[] = [
+            "id" => $row["id"],
             "img" => $row["img"],
             "title" => $row["title"],
             "author" => $row["author"]

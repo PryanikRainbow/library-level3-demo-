@@ -4,6 +4,9 @@ namespace app\models;
 
 use Exception;
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 class ConnectDB
 {
     private static $connect = null;
@@ -21,6 +24,7 @@ class ConnectDB
 
     }
 
+    // переробити (не буде ж модель html помилку видавати)
     public static function getInstance()
     {
         if (self::$connect == null) {

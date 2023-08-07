@@ -16,9 +16,9 @@
 
     <link rel="shortcut icon" href="https://library-shpp-v1.local/favicon.ico">
     <style>
-        .details {
+        /* .details {
             display: none;
-        }
+        } */
     </style>
 </head>
 

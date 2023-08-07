@@ -10,6 +10,6 @@ class ErrorController extends Controller
         echo "error";
         // echo json_encode(['error' => 'Bad Request']);
         // http_response_code(404);
-        require_once __DIR__ . '/../../views/error.php';
+       render( __DIR__ . '/../../views/error.php');
     }
 }
