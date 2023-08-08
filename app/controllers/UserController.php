@@ -41,22 +41,25 @@ class UserController extends Controller
     {
         //витягнути з БД
         echo "printBooks";
-        render(USER_TEMPLATE_PATH . '/header.php');
-
         $dataBooks = getDataBooks();
-        render(USER_TEMPLATE_PATH . '/' . $action, $dataBooks);
+        if ($dataBooks != false) {
+            render(USER_TEMPLATE_PATH . '/header.php');
+            render(USER_TEMPLATE_PATH . '/' . $action, $dataBooks);
+            render(USER_TEMPLATE_PATH . '/footer.php');
+        } else {
+            render(USER_TEMPLATE_PATH . '/error.php');
+        }
 
-        render(USER_TEMPLATE_PATH . '/footer.php');
     }
 
     private function printBookPage($action, $id)
     {
         //спробувати витягнути з БД парам. Якщо не вийде, помилку
         echo "book";
-        $data = getDataBook($id);
-        if ($data != false) {
+        $dataBook = getDataBook($id);
+        if ($dataBook != false) {
             render(USER_TEMPLATE_PATH . '/header.php');
-            render(USER_TEMPLATE_PATH . $action, $data);
+            render(USER_TEMPLATE_PATH . $action, $dataBook);
             render(USER_TEMPLATE_PATH . '/footer.php');
         } else {
             // echo "not found!";

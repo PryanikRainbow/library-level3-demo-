@@ -12,3 +12,7 @@ function render($template, $data = null)
 
     echo $output;
 }
+
+function e($value) {
+    return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+}

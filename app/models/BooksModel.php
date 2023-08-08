@@ -13,21 +13,28 @@ ini_set('display_errors', 1);
 function getDataBooks()
 {
     $db = ConnectDB::getInstance();
-    $dataBooks = $db->query(file_get_contents(__DIR__ . '/../../db/select_books.sql'));
+    $query = (file_get_contents(__DIR__ . '/../../db/select_books.sql'));
 
-    $dataBooksArray = [];
+    $stmt = $db->prepare($query);
 
-    while($row = $dataBooks->fetch_assoc()) {
-        //в масив додаємо масив асоціативних масивів(або пар)
-        $dataBooksArray[] = [
-            "id" => $row["id"],
-            "img" => $row["img"],
-            "title" => $row["title"],
-            "author" => $row["author"]
-        ];
+    if ($stmt->execute()) {
+        $dataBooksArray = [];
+        $result = $stmt->get_result();
+
+        while($row = $result->fetch_assoc()) {
+            //в масив додаємо масив асоціативних масивів(або пар)
+            $dataBooksArray[] = [
+                "id" => $row["id"],
+                "img" => $row["img"],
+                "title" => $row["title"],
+                "author" => $row["author"]
+            ];
+        }
+
+        return $dataBooksArray;
     }
 
-    return $dataBooksArray;
+    return false;
 };
 
 // $dataBooks = getDataBooks();
