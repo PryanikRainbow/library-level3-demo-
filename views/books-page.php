@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 
+<!-- переписати лінки -->
 <!-- saved from url=(0054)file:///home/andy/Desktop/books-page/shpp-library.html -->
 <html lang="ru">
 
@@ -16,7 +17,13 @@
                 
             </div>
         </div>
-        <center>оопс... в этом хтмл не реализованы кнопки "вперед" и "назад", а книг на странице должно быть не больше 20
+        <center>
+            <a href=" <?= '/offset/' . $offset ?> ">
+              <button type="button" class="details btn btn-success">Назад</button>
+            </a>
+            <a href=" <?= '/offset/' . $offset ?>">
+               <button type="button" class="details btn btn-success">Вперед</button>
+            </a>
         </center>
 
     </section>

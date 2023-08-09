@@ -9,13 +9,19 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 // const DEFAULT_COUNT_BOOKS = 20;
+// const LIMIT = 8;
+// const OFFSET = 1;
+// $offset = 8;
 
-function getDataBooks()
+// echo getCountRowsBooks();
+
+function getDataBooks($limit, $offset)
 {
     $db = ConnectDB::getInstance();
     $query = (file_get_contents(__DIR__ . '/../../db/select_books.sql'));
 
     $stmt = $db->prepare($query);
+    $stmt->bind_param("ii", $limit, $offset);
 
     if ($stmt->execute()) {
         $dataBooksArray = [];
@@ -36,6 +42,15 @@ function getDataBooks()
 
     return false;
 };
+
+function getCountRowsBooks(){
+    $db = ConnectDB::getInstance();
+    $query = (file_get_contents(__DIR__ . '/../../db/count_rows_books_table.sql'));
+    
+    $result = $db->query($query);
+
+    return $result ? $result->fetch_row()[0] : false;
+}
 
 // $dataBooks = getDataBooks();
 // $dataBooksArray = [];

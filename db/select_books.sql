@@ -1,1 +1,1 @@
-SELECT id, img, title, author FROM books LIMIT 16;
+SELECT id, img, title, author FROM books LIMIT ? OFFSET ?;
