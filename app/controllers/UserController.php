@@ -22,14 +22,14 @@ ini_set('display_errors', 1);
 
 class UserController extends Controller
 {
-    public function defineController($action, $id = null)
+    public function defineController($action, $numParam=null)
     {
         switch ($action) {
             case 'books-page.php':
-                $this -> printBooksPage($action);
+                $this -> printBooksPage($action, $numParam);
                 break;
             case 'book-page.php':
-                $this -> printBookPage($action, $id);
+                $this -> printBookPage($action, $numParam);
                 break;
             default:
                 render(USER_TEMPLATE_PATH . '/error.php');
@@ -37,14 +37,21 @@ class UserController extends Controller
         }
     }
 
-    private function printBooksPage($action)
+    private function printBooksPage($action, $offset = 0)
     {
-        //витягнути з БД
         echo "printBooks";
-        $dataBooks = getDataBooks();
+        
+        $dataBooks = getDataBooks(LIMIT, $offset);
+
         if ($dataBooks != false) {
+            $dataTemplate = [
+              'dataBooks' => $dataBooks,
+              'offset' => $offset
+            ];
+            print_r($dataTemplate);
             render(USER_TEMPLATE_PATH . '/header.php');
-            render(USER_TEMPLATE_PATH . '/' . $action, $dataBooks);
+            // echo $offset; //тут оффсет видно
+            render(USER_TEMPLATE_PATH . '/' . $action, $dataTemplate); //в шаблоні ні
             render(USER_TEMPLATE_PATH . '/footer.php');
         } else {
             render(USER_TEMPLATE_PATH . '/error.php');

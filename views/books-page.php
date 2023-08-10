@@ -10,7 +10,7 @@
             <div id="content" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
                 <?php
-                foreach ($data as $dataBook) {
+                foreach ($dataBooks as $dataBook) {
                     render(__DIR__ . '/book-container.php', $dataBook);
                 }
                 ?>
@@ -18,11 +18,11 @@
             </div>
         </div>
         <center>
-            <a href=" <?= '/offset/' . $offset ?> ">
-              <button type="button" class="details btn btn-success">Назад</button>
+           <a href=" <?= '/offset/prev/' . ($offset - OFFSET_DEFAULT) ?>">
+           <button type="button" class="details btn btn-success">Назад</button>
             </a>
-            <a href=" <?= '/offset/' . $offset ?>">
-               <button type="button" class="details btn btn-success">Вперед</button>
+            <a href=" <?= '/offset/next/' . ($offset + OFFSET_DEFAULT) ?>"> 
+            <button type="button" class="details btn btn-success">Вперед</button>
             </a>
         </center>
 

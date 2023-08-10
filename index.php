@@ -20,10 +20,17 @@ $userController = new UserController;
 
 ///views/book-page.php?id=1
 if ($requestURI === "/") {
-   $userController->defineController(BOOKS_PAGE);
+   $userController->defineController(BOOKS_PAGE,0);
 } elseif(route("/views/book-page.php?id=", $requestURI) && isNumParam()){
     //початк урі, гет передаємл
    $userController->defineController('book-page.php', (int)getParam());
+} elseif(route("/offset/next/", $requestURI) && isNumParam()){
+    echo(getParam());
+    // echo "next";
+   $userController->defineController(BOOKS_PAGE, (int)getParam());
+} elseif(route("/offset/prev/", $requestURI) && isNumParam()){
+    echo "prev";
+   $userController->defineController(BOOKS_PAGE, (int)getParam());
 } elseif($requestURI === '/views/error.php'){
     echo "views error";
     ErrorController::printErrorPage();

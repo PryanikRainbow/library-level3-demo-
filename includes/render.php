@@ -1,10 +1,18 @@
 <?php
 
+const LIMIT = 20;
+const OFFSET_DEFAULT = 20;
+// $offset = 1;
+
+// function $currentOffset($offset){
+
+// }
+
 function render($template, $data = null)
 {
     if ($data != null) {
     extract($data);
-    // print_r($data);
+ //   print_r($data);
 }
     ob_start();
     require $template;
@@ -16,3 +24,4 @@ function render($template, $data = null)
 function e($value) {
     return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
 }
+
