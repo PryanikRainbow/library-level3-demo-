@@ -39,7 +39,7 @@ class UserController extends Controller
 
     private function printBooksPage($action, $offset = 0)
     {
-        echo "printBooks";
+        echo "printBooksMethod";
         
         $dataBooks = getDataBooks(LIMIT, $offset);
 
@@ -48,7 +48,7 @@ class UserController extends Controller
               'dataBooks' => $dataBooks,
               'offset' => $offset
             ];
-            print_r($dataTemplate);
+
             render(USER_TEMPLATE_PATH . '/header.php');
             // echo $offset; //тут оффсет видно
             render(USER_TEMPLATE_PATH . '/' . $action, $dataTemplate); //в шаблоні ні

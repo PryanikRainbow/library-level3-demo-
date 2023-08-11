@@ -1,7 +1,7 @@
 <?php
 
-const LIMIT = 20;
-const OFFSET_DEFAULT = 20;
+const LIMIT = 1;
+const OFFSET_DEFAULT = 1;
 // $offset = 1;
 
 // function $currentOffset($offset){

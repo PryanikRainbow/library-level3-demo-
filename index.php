@@ -24,12 +24,9 @@ if ($requestURI === "/") {
 } elseif(route("/views/book-page.php?id=", $requestURI) && isNumParam()){
     //початк урі, гет передаємл
    $userController->defineController('book-page.php', (int)getParam());
-} elseif(route("/offset/next/", $requestURI) && isNumParam()){
+} elseif(route("/offset/", $requestURI) && isNumParam()){
     echo(getParam());
     // echo "next";
-   $userController->defineController(BOOKS_PAGE, (int)getParam());
-} elseif(route("/offset/prev/", $requestURI) && isNumParam()){
-    echo "prev";
    $userController->defineController(BOOKS_PAGE, (int)getParam());
 } elseif($requestURI === '/views/error.php'){
     echo "views error";
@@ -42,6 +39,17 @@ else {
     $errorController = new ErrorController('error.php');
     $errorController -> printErrorPage();
 }
+
+// elseif(route("/offset/", $requestURI) && isNumParam()){
+// }
+// elseif(route("/offset/next/", $requestURI) && isNumParam()){
+//     echo(getParam());
+//      echo "next";
+//    $userController->defineController(BOOKS_PAGE, (int)getParam());
+// } elseif(route("/offset/prev/", $requestURI) && isNumParam()){
+//     echo "prev";
+//    $userController->defineController(BOOKS_PAGE, (int)getParam());
+// }
 
 
 const EXISTED_DIRS_PATHS =

@@ -18,10 +18,10 @@
             </div>
         </div>
         <center>
-           <a href=" <?= '/offset/prev/' . ($offset - OFFSET_DEFAULT) ?>">
+           <a href=" <?= '/prev/offset/' . ($offset - OFFSET_DEFAULT) ?>">
            <button type="button" class="details btn btn-success">Назад</button>
             </a>
-            <a href=" <?= '/offset/next/' . ($offset + OFFSET_DEFAULT) ?>"> 
+            <a href=" <?= '/next/offset/' . ($offset + OFFSET_DEFAULT) ?>"> 
             <button type="button" class="details btn btn-success">Вперед</button>
             </a>
         </center>
