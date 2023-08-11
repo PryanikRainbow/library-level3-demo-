@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 
-<!-- переписати лінки -->
 <!-- saved from url=(0054)file:///home/andy/Desktop/books-page/shpp-library.html -->
 <html lang="ru">
 

@@ -9,8 +9,9 @@ require_once 'includes/requestBookChecking.php';
 use app\controllers\UserController; 
 use app\controllers\ErrorController; 
 
-const BOOKS_PAGE = 'books-page.php';
-const BOOK_PAGE = 'book-page.php';
+const EXPECTED_BOOKS_TEMPLATE = 'books-page';
+const EXPECTED_BOOK_TEMPLATE = 'book-page';
+const EXPECTED_ERROR_TEMPLATE = 'error';
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -20,12 +21,12 @@ $userController = new UserController;
 
 ///views/book-page.php?id=1
 if ($requestURI === "/") {
-     $userController -> defineController(BOOKS_PAGE,0);
-} elseif(route("/views/book-page.php?id=", $requestURI) && isNumParam()){
+     $userController -> defineController(EXPECTED_BOOKS_TEMPLATE,0);
+} elseif(route("/book/", $requestURI) && isNumParam()){
     //початк урі, гет передаємл
-   $userController->defineController('book-page.php', (int)getParam());
+   $userController->defineController(EXPECTED_BOOK_TEMPLATE, (int)getParam());
 } elseif(route("/offset/", $requestURI) && isNumParam()){
-    $userController->defineController(BOOKS_PAGE, (int)getParam());
+    $userController->defineController(EXPECTED_BOOKS_TEMPLATE, (int)getParam());
 } elseif($requestURI === '/views/error.php'){
     echo "views error";
     ErrorController::printErrorPage();

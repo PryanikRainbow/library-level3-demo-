@@ -5,16 +5,15 @@
         <div class="container">
             <div id="content" class="book_block col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <script id="pattern" type="text/template">
-                    <div data-book-id="<?php echo $id ?>" class="book_item col-xs-6 col-sm-3 col-md-2 col-lg-2">
+                    <div data-book-id="<?= $id ?>" class="book_item col-xs-6 col-sm-3 col-md-2 col-lg-2">
                         <div class="book">
-                            <!-- todo (1-url)-->
-                            <a href="<?php echo 'https://library-shpp-v1.local/public/images/' . $img ?>"><img src=<?php echo 'https://library-shpp-v1.local/public/images/'. $img ?> alt="<?php echo $title ?>">
-                                <div data-title="<?= 'title' ?>" class="blockI">
-                                    <div data-book-title="<?php echo 'title' ?>" class="title size_text"><?php echo $title; ?></div>
-                                    <div data-book-author="<?php echo 'author' ?>" class="author"><?php echo 'author' ?></div>
+                            <a href="<?= '/public/images/' . e($img) ?>"><img src=<?= '/public/images/'. $img ?> alt="<?= e($title) ?>">
+                                    <div data-title="<?= 'title' ?>" class="blockI">
+                                    <div data-book-title="<?= 'title' ?>" class="title size_text"><?= e($title) ?></div>
+                                    <div data-book-author="<?= 'author' ?>" class="author"><?= e($author) ?></div>
                                 </div>
                             </a>
-                            <a href="<?= e('https://library-shpp-v1.local/views/book-page.php?id=' . $id) ?>">
+                            <a href="<?= e('/views/book-page.php?id=' . $id) ?>">
                                 <button type="button" class="details btn btn-success">Читать</button>
                             </a>
                         </div>
@@ -22,7 +21,7 @@
                 </script>
                 <div id="id" book-id="<?= $id ?>">
                     <div id="bookImg" class="col-xs-12 col-sm-3 col-md-3 item" style=" margin:0px;">
-<img src="<?= e('https://library-shpp-v1.local/public/images/' . $img) ?>" alt="Responsive image" class="img-responsive">                     
+<img src="<?= e('/public/images/' . $img) ?>" alt="Responsive image" class="img-responsive">                     
                         <hr>
                     </div>
                     <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9 info">
@@ -52,7 +51,7 @@
                         <p class="description"><?= e($description) ?></p>
                     </div>
                 </div>
-                <script src="https://library-shpp-v1.local/public/js/book.js" defer=""></script>
+                <script src="/public/js/book.js" defer=""></script>
             </div>
         </div>
     </section>

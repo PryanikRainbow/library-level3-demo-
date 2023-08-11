@@ -25,25 +25,25 @@ class UserController extends Controller
     public function defineController($action, $numParam=null)
     {
         switch ($action) {
-            case 'books-page.php':
+            case 'books-page':
                 $this -> printBooksPage($action, $numParam);
                 break;
-            case 'book-page.php':
+            case 'book-page':
                 $this -> printBookPage($action, $numParam);
                 break;
             default:
-                render(USER_TEMPLATE_PATH . '/error.php');
+                render(USER_TEMPLATE_PATH . "error.php");
                 break;
         }
     }
 
-    private function printBooksPage($action, $offset = 0)
+    private function printBooksPage($action, $offsetCurrent = 0)
     {
         echo "printBooksMethod";
         
-        $dataBooks = getDataBooks(LIMIT, $offset);
-        $pre = $offset !== 0 ? $offset - LIMIT : 0;
-        $next = $offset + LIMIT;
+        $dataBooks = getDataBooks(LIMIT, $offsetCurrent);
+        $pre = $offsetCurrent !== 0 ? $offsetCurrent - OFFSET_DEFAULT : 0;
+        $next = $offsetCurrent + OFFSET_DEFAULT;
 
         if ($dataBooks != false) {
             $dataTemplate = [
@@ -54,7 +54,7 @@ class UserController extends Controller
 
             render(USER_TEMPLATE_PATH . '/header.php');
             // echo $offset; //тут оффсет видно
-            render(USER_TEMPLATE_PATH . '/' . $action, $dataTemplate); //в шаблоні ні
+            render(USER_TEMPLATE_PATH . '/' . $action . '.php', $dataTemplate); //в шаблоні ні
             render(USER_TEMPLATE_PATH . '/footer.php');
         } else {
             render(USER_TEMPLATE_PATH . '/error.php');
@@ -69,7 +69,7 @@ class UserController extends Controller
         $dataBook = getDataBook($id);
         if ($dataBook != false) {
             render(USER_TEMPLATE_PATH . '/header.php');
-            render(USER_TEMPLATE_PATH . $action, $dataBook);
+            render(USER_TEMPLATE_PATH . $action . '.php', $dataBook);
             render(USER_TEMPLATE_PATH . '/footer.php');
         } else {
             // echo "not found!";

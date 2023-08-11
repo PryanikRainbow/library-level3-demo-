@@ -55,7 +55,7 @@
         <div class="error-code">404</div>
         <div class="error-message">not found</div>
     </div>
-    <a class="home-link" href="https://library-shpp-v1.local">На главную</a>
+    <a class="home-link" href="/">На главную</a>
 </body>
 
 </html>
