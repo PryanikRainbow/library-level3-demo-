@@ -20,21 +20,18 @@ $userController = new UserController;
 
 ///views/book-page.php?id=1
 if ($requestURI === "/") {
-   $userController->defineController(BOOKS_PAGE,0);
+     $userController -> defineController(BOOKS_PAGE,0);
 } elseif(route("/views/book-page.php?id=", $requestURI) && isNumParam()){
     //початк урі, гет передаємл
    $userController->defineController('book-page.php', (int)getParam());
 } elseif(route("/offset/", $requestURI) && isNumParam()){
-    echo(getParam());
-    // echo "next";
-   $userController->defineController(BOOKS_PAGE, (int)getParam());
+    $userController->defineController(BOOKS_PAGE, (int)getParam());
 } elseif($requestURI === '/views/error.php'){
     echo "views error";
     ErrorController::printErrorPage();
 } elseif($requestURI === '/admin/a.php'){
    require_once __DIR__.'/app/controllers/AdminController.php';
-}
-else {
+} else {
     echo 'else';
     $errorController = new ErrorController('error.php');
     $errorController -> printErrorPage();

@@ -42,11 +42,14 @@ class UserController extends Controller
         echo "printBooksMethod";
         
         $dataBooks = getDataBooks(LIMIT, $offset);
+        $pre = $offset !== 0 ? $offset - LIMIT : 0;
+        $next = $offset + LIMIT;
 
         if ($dataBooks != false) {
             $dataTemplate = [
               'dataBooks' => $dataBooks,
-              'offset' => $offset
+              'pre' => $pre,
+              'next' => $next
             ];
 
             render(USER_TEMPLATE_PATH . '/header.php');
