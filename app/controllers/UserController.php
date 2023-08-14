@@ -2,8 +2,11 @@
 
 namespace app\controllers;
 
+use function app\models\getCountRowsBooks;
 use function app\models\getDataBook;
-use function app\models\getDataBooks;
+ use function app\models\getDataBooks;
+
+
 
 require_once __DIR__ . '/../../includes/render.php';
 require_once 'Controller.php';
@@ -39,17 +42,20 @@ class UserController extends Controller
 
     private function printBooksPage($action, $offsetCurrent = 0)
     {
-        echo "printBooksMethod";
+        // echo "printBooksMethod";
         
         $dataBooks = getDataBooks(LIMIT, $offsetCurrent);
         $pre = $offsetCurrent !== 0 ? $offsetCurrent - OFFSET_DEFAULT : 0;
         $next = $offsetCurrent + OFFSET_DEFAULT;
+        echo getCountRowsBooks();
 
         if ($dataBooks != false) {
             $dataTemplate = [
               'dataBooks' => $dataBooks,
               'pre' => $pre,
-              'next' => $next
+              'next' => $next,
+              'isFirstPage' => isFirstBooksPage($pre, $next),
+              'isLastPage' => isLastBooksPage(getCountRowsBooks(), $next)
             ];
 
             render(USER_TEMPLATE_PATH . '/header.php');

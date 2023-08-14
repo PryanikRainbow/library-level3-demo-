@@ -2,7 +2,7 @@
 
 namespace app\models;
 
-require_once __DIR__ . '/ConnectDB.php';
+require __DIR__ . '/ConnectDB.php';
 use app\models\ConnectDB;
 
 error_reporting(E_ALL);
@@ -13,10 +13,12 @@ ini_set('display_errors', 1);
 // const OFFSET = 1;
 // $offset = 8;
 
-// echo getCountRowsBooks();
+//echo getCountRowsBooks();
+// $db = ConnectDB::getInstance();
 
 function getDataBooks($limit, $offset)
 {
+    // global $db;
     $db = ConnectDB::getInstance();
     $query = (file_get_contents(__DIR__ . '/../../db/select_books.sql'));
 
@@ -43,14 +45,20 @@ function getDataBooks($limit, $offset)
     return false;
 };
 
-function getCountRowsBooks(){
+function getCountRowsBooks()
+{
+   // global $db;
     $db = ConnectDB::getInstance();
+
+    // $db = ConnectDB::getInstance();
     $query = (file_get_contents(__DIR__ . '/../../db/count_rows_books_table.sql'));
-    
+    var_dump($query);
+
     $result = $db->query($query);
 
-    return $result ? $result->fetch_row()[0] : false;
-}
+    $row = $result->fetch_row();
+    return isset($row[0]) ? (int)$row[0] : false;
+} 
 
 // $dataBooks = getDataBooks();
 // $dataBooksArray = [];

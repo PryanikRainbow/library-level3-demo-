@@ -18,10 +18,10 @@
         </div>
         <center>
            <a href=" <?= '/offset/' . $pre ?>">
-           <button type="button" class="details btn btn-success">Назад</button>
+           <button type="button" class="details btn btn-success" <?= $isFirstPage == true ? 'disabled' : '' ?>>Назад</button>
             </a>
             <a href=" <?= '/offset/' . $next ?>"> 
-            <button type="button" class="details btn btn-success">Вперед</button>
+            <button type="button" class="details btn btn-success" <?= $isLastPage == true ? 'disabled' : '' ?>>Вперед</button>
             </a>
         </center>
 

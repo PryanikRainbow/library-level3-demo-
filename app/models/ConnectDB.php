@@ -24,22 +24,21 @@ class ConnectDB
 
     }
 
-    // переробити (не буде ж модель html помилку видавати)
     public static function getInstance()
     {
         if (self::$connect == null) {
-
             try {
                 self::$connect = new \mysqli(self::SERVER_NAME, self::USER_NAME, self::PASSWORD);
                 self::$connect->multi_query(file_get_contents(__DIR__ . ' /../../db/db_books.sql'));
-                while (self::$connect->next_result()) {;} //?
+                while (self::$connect->next_result()) {;} 
             } catch (Exception $e) {
                 echo $e->getMessage();
             }
-
-            return self::$connect;
         }
+        
+        return self::$connect;
     }
+
 
     public static function closeDB(){
         if (self::$connect !== null) {
@@ -47,4 +46,5 @@ class ConnectDB
             self::$connect = null; 
         } 
     }
+
 }
