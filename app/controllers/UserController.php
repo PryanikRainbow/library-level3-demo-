@@ -4,9 +4,8 @@ namespace app\controllers;
 
 use function app\models\getCountRowsBooks;
 use function app\models\getDataBook;
- use function app\models\getDataBooks;
-
-
+use function app\models\getDataBooks;
+use function app\models\incrementWantsCounter;
 
 require_once __DIR__ . '/../../includes/render.php';
 require_once 'Controller.php';
@@ -34,6 +33,9 @@ class UserController extends Controller
             case 'book-page':
                 $this -> printBookPage($action, $numParam);
                 break;
+            case '/ajax/wants-click/':
+                $this -> rewriteWantsCounter($numParam);
+                break;
             default:
                 render(USER_TEMPLATE_PATH . "error.php");
                 break;
@@ -43,7 +45,7 @@ class UserController extends Controller
     private function printBooksPage($action, $offsetCurrent = 0)
     {
         // echo "printBooksMethod";
-        
+
         $dataBooks = getDataBooks(LIMIT, $offsetCurrent);
         $pre = $offsetCurrent !== 0 ? $offsetCurrent - OFFSET_DEFAULT : 0;
         $next = $offsetCurrent + OFFSET_DEFAULT;
@@ -59,8 +61,7 @@ class UserController extends Controller
             ];
 
             render(USER_TEMPLATE_PATH . '/header.php');
-            // echo $offset; //тут оффсет видно
-            render(USER_TEMPLATE_PATH . '/' . $action . '.php', $dataTemplate); //в шаблоні ні
+            render(USER_TEMPLATE_PATH . '/' . $action . '.php', $dataTemplate);
             render(USER_TEMPLATE_PATH . '/footer.php');
         } else {
             render(USER_TEMPLATE_PATH . '/error.php');
@@ -68,6 +69,7 @@ class UserController extends Controller
 
     }
 
+    //роутери, контролел, ДБ,
     private function printBookPage($action, $id)
     {
         //спробувати витягнути з БД парам. Якщо не вийде, помилку
@@ -83,7 +85,15 @@ class UserController extends Controller
         }
     }
 
+    private function rewriteWantsCounter($id)
+    {
+        echo "wants+1";
+        incrementWantsCounter($id);
+    }
+
 }
+
+
 
 // public function get($action) {
 //     switch ($action) {

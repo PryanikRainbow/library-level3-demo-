@@ -36,3 +36,16 @@ ini_set('display_errors', 1);
     
         return false; 
     }
+
+    function  incrementWantsCounter($id){
+        $db = ConnectDB::getInstance();
+        $query = file_get_contents(__DIR__ . '/../../db/update_wantsCounter.sql');
+    
+        $stmt = $db->prepare($query);
+        $stmt->bind_param("i", $id);
+    
+        if ($stmt->execute()) {return true;
+        }
+    
+        return false;  
+    }

@@ -23,6 +23,8 @@
                     <div id="bookImg" class="col-xs-12 col-sm-3 col-md-3 item" style=" margin:0px;">
 <img src="<?= e('/public/images/' . $img) ?>" alt="Responsive image" class="img-responsive">                     
                         <hr>
+                        <div class="countersRow"><span class="propertiesCounter">Просмотры:</span><span id="counter"><?= 10 ?></span></div>
+                        <div class="countersRow"><span class="propertiesCounter">Хочу:</span><span id="counter"><?= $wantsCounter ?></span></div>
                     </div>
                     <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9 info">
                         <div class="bookInfo col-md-12">
@@ -36,9 +38,9 @@
                                 <div class="bookRow"><span class="properties">isbn:</span><span id="isbn"><?= e($isbn) ?></span></div>
                             </div>
                         </div>
-                        <div class="btnBlock col-xs-12 col-sm-12 col-md-12">
-                            <button type="button" class="btnBookID btn-lg btn btn-success">Хочу читать!</button>
-                        </div>
+                          <div class="btnBlock col-xs-12 col-sm-12 col-md-12">
+                             <button type="button" class="btnBookID btn-lg btn btn-success" data-book-id="<?= $id ?>">Хочу читать!</button>
+                          </div>
                         <div class="bookDescription col-xs-12 col-sm-12 col-md-12 hidden-xs hidden-sm">
                             <h4>О книге</h4>
                             <hr>
@@ -58,6 +60,5 @@
 
 
 </html>
-
 
 
