@@ -49,6 +49,45 @@ var bookId;
 // });
 /*------------------ Sending email by clicking on the button ----------------*/
 
+//працює?
+
+// $(document).ready(function() {
+//     $('.details').click(function() {
+//         let bookId = $(this).data('book-id'); // Отримання ID книги з атрибуту data
+
+//         $.ajax({
+//             url: '/ajax/views-count/' + bookId,
+//             method: 'GET',
+//             success: function(response) {
+//                 let newViewsCount = parseInt(response);
+//                 // Оновити лічильник переглядів на сторінці
+//                 $('#viewsCounter').text(newViewsCount);
+//             }
+//         });
+//     });
+// });
+
+$(document).ready(function() {
+    // Отримуємо елемент лічильника переглядів
+      let viewsCounterElement = $("#viewsCounter");
+
+    // Отримуємо ID книги з атрибуту 'book-id' елемента
+    let bookId = $("#id").attr("book-id");
+
+    // Виконуємо AJAX-запит при відкритті сторінки
+    $.ajax({
+        type: "POST",
+        url: "/ajax/views-count/" + bookId, // Ваш роут для оновлення лічильника
+        data: { id: bookId }, // Відправляємо ID книги на сервер
+        success: function(response) {
+            let newViewsCounter = parseInt(response);
+            // Успішний відгук з сервера
+            // Оновлюємо значення лічильника на сторінці
+            $('#viewsCounter').text(newViewsCounter);
+        }
+    });
+});
+
 $('.btnBookID').click(function(event) {
     event.preventDefault();
     
@@ -73,15 +112,6 @@ $('.btnBookID').click(function(event) {
     });
 });
 
-function updateClickCount(bookId) {
-    $.ajax({
-        url: '/get-click-count/' + bookId,
-        method: 'GET',
-        success: function (response) {
-            $('#counter[data-book-id="' + bookId + '"]').text(response.clickCount);
-        }
-    });
-}
 
 //after success
     // var email = $('.orderEmail').val();

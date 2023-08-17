@@ -29,6 +29,8 @@ if ($requestURI === "/") {
     $userController->defineController(EXPECTED_BOOKS_TEMPLATE, (int)getParam());
 } elseif(route("/ajax/wants-click/", $requestURI) && isNumParam()){
     $userController->defineController('/ajax/wants-click/', (int)getParam());
+} elseif(route("/ajax/views-count/", $requestURI) && isNumParam()){
+    $userController->defineController('/ajax/views-count/', (int)getParam());
 } elseif($requestURI === '/views/error.php'){
     echo "views error";
     ErrorController::printErrorPage();

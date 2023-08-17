@@ -23,7 +23,7 @@
                     <div id="bookImg" class="col-xs-12 col-sm-3 col-md-3 item" style=" margin:0px;">
 <img src="<?= e('/public/images/' . $img) ?>" alt="Responsive image" class="img-responsive">                     
                         <hr>
-                        <div class="countersRow"><span class="propertiesCounter">Просмотры:</span><span id="viewsCounter"><?= 10 ?></span></div>
+                        <div class="countersRow"><span class="propertiesCounter">Просмотры:</span><span id="viewsCounter"><?= $viewsCounter ?></span></div>
                         <div class="countersRow"><span class="propertiesCounter">Хочу:</span><span id="wantsCounter"><?= $wantsCounter ?></span></div>
                     </div>
                     <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9 info">

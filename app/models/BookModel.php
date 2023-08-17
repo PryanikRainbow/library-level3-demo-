@@ -26,9 +26,9 @@ ini_set('display_errors', 1);
         return false; 
     }
 
-    function  incrementWantsCounter($id){
+    function  incrementCounter($id, $counterType){
         $db = ConnectDB::getInstance();
-        $query = file_get_contents(__DIR__ . '/../../db/update_wantsCounter.sql');
+        $query = file_get_contents(__DIR__ . '/../../db/update_' . $counterType . 'Counter.sql');
     
         $stmt = $db->prepare($query);
         $stmt->bind_param("i", $id);
@@ -40,17 +40,47 @@ ini_set('display_errors', 1);
         return false;  
     }
 
-    function getWantsCounter($id){
+    function getCounter($id, $counterType){
         $db = ConnectDB::getInstance();
-        $query = file_get_contents(__DIR__ . '/../../db/select_wantsCounter.sql');
+        $query = file_get_contents(__DIR__ . '/../../db/select_'  . $counterType . 'Counter.sql');
         
         $stmt = $db->prepare($query);
         $stmt -> bind_param('i', $id);
 
-        if ($stmt -> execute()){
+        if ($stmt->execute()) {
             $result = $stmt->get_result();
-            $row = $result->fetch_assoc();
-            if ($row) return (int)$row['wantsCounter'];
-        }
-        return false; 
+            $row = $result->fetch_row();
+            if ($row) {
+                return (int)$row[0]; // Повертаємо перший стовпець як число
+            }
+        } 
     }
+
+    // function  incrementViewsCounter($id){
+    //     $db = ConnectDB::getInstance();
+    //     $query = file_get_contents(__DIR__ . '/../../db/update_viewsCounter.sql');
+    
+    //     $stmt = $db->prepare($query);
+    //     $stmt->bind_param("i", $id);
+    
+    //     if ($stmt->execute()) {
+    //         return true;
+    //     }
+    
+    //     return false;  
+    // }
+
+    // function getViewsCounter($id){
+    //     $db = ConnectDB::getInstance();
+    //     $query = file_get_contents(__DIR__ . '/../../db/select_viewsCounter.sql');
+        
+    //     $stmt = $db->prepare($query);
+    //     $stmt -> bind_param('i', $id);
+
+    //     if ($stmt -> execute()){
+    //         $result = $stmt->get_result();
+    //         $row = $result->fetch_assoc();
+    //         if ($row) return (int)$row['wantsCounter'];
+    //     }
+    //     return false; 
+    // }

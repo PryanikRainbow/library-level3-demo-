@@ -2,11 +2,14 @@
 
 namespace app\controllers;
 
+use CounterType;
+
 use function app\models\getCountRowsBooks;
 use function app\models\getDataBook;
 use function app\models\getDataBooks;
-use function app\models\incrementWantsCounter;
-use function app\models\getWantsCounter;
+use function app\models\incrementCounter;
+use function app\models\getCounter;
+
 
 require_once __DIR__ . '/../../includes/render.php';
 require_once 'Controller.php';
@@ -35,7 +38,10 @@ class UserController extends Controller
                 $this -> printBookPage($action, $numParam);
                 break;
             case '/ajax/wants-click/':
-                $this -> rewriteWantsCounter($numParam);
+                $this -> rewriteCounter($numParam, CounterType::WANTS);
+                break;
+            case '/ajax/views-count/':
+                $this -> rewriteCounter($numParam, CounterType::VIEWS);
                 break;
             default:
                 render(USER_TEMPLATE_PATH . "error.php");
@@ -86,12 +92,12 @@ class UserController extends Controller
         }
     }
 
-    private function rewriteWantsCounter($id)
+    private function rewriteCounter($id, $counterType)
     {
-    incrementWantsCounter($id);
-    $newWantsCounter = getWantsCounter($id);
-    echo $newWantsCounter;
-}
+        incrementCounter($id, $counterType);
+        $newCounter = getCounter($id, $counterType);
+        echo $newCounter;
+    }
 
 }
 

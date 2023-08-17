@@ -2,11 +2,11 @@
 
 const LIMIT = 20;
 const OFFSET_DEFAULT = 10;
-// $offset = 1;
-
-// function $currentOffset($offset){
-
-// }
+ 
+class CounterType {
+    const WANTS = 'wants';
+    const VIEWS = 'views';
+}
 
 function render($template, $data = null)
 {
