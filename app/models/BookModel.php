@@ -9,17 +9,6 @@ use app\models\ConnectDB;
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// const DEFAULT_COUNT_BOOKS = 20;
-// Щось тут рне так :)
-
-// echo "book";
-// if (getDataBook(7) !== false) {
-//     echo "Yes!";
-// } else {
-//     echo "not found!";
-// }
-
-
     function getDataBook($id)
     {
         $db = ConnectDB::getInstance();
@@ -44,8 +33,24 @@ ini_set('display_errors', 1);
         $stmt = $db->prepare($query);
         $stmt->bind_param("i", $id);
     
-        if ($stmt->execute()) {return true;
+        if ($stmt->execute()) {
+            return true;
         }
     
         return false;  
+    }
+
+    function getWantsCounter($id){
+        $db = ConnectDB::getInstance();
+        $query = file_get_contents(__DIR__ . '/../../db/select_wantsCounter.sql');
+        
+        $stmt = $db->prepare($query);
+        $stmt -> bind_param('i', $id);
+
+        if ($stmt -> execute()){
+            $result = $stmt->get_result();
+            $row = $result->fetch_assoc();
+            if ($row) return (int)$row['wantsCounter'];
+        }
+        return false; 
     }

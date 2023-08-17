@@ -48,7 +48,42 @@ var bookId;
 //     }
 // });
 /*------------------ Sending email by clicking on the button ----------------*/
+
 $('.btnBookID').click(function(event) {
+    event.preventDefault();
+    
+    let bookId = $(this).data('book-id'); // Отримання ID з атрибуту data
+    
+    $.ajax({
+        url: ' /ajax/wants-click/' + bookId, // Додаємо ID до URL-шляху
+        method: 'POST',
+        data: { action: 'wantsButtonClick' },
+        
+        success: function(response) {
+            let newWantsCounter = parseInt(response);
+            $('#wantsCounter').text(newWantsCounter);
+
+            alert(
+                "Книга свободна и ты можешь прийти за ней." +
+                " Наш адрес: г. Кропивницкий, переулок Васильевский 10, 5 этаж." +
+                " Лучше предварительно прозвонить и предупредить нас, чтоб " +
+                " не попасть в неловкую ситуацию. Тел. 099 196 24 69"
+            );
+        }
+    });
+});
+
+function updateClickCount(bookId) {
+    $.ajax({
+        url: '/get-click-count/' + bookId,
+        method: 'GET',
+        success: function (response) {
+            $('#counter[data-book-id="' + bookId + '"]').text(response.clickCount);
+        }
+    });
+}
+
+//after success
     // var email = $('.orderEmail').val();
     // var isEmail = controller.validateEmail(email);
     // if (isEmail) {
@@ -64,15 +99,3 @@ $('.btnBookID').click(function(event) {
     //         " Оставь свой email и мы сообщим, как только книга вновь" +
     //         " появится в библиотеке", bookId);
     // } else 
-    {
-        alert(
-            "Книга свободна и ты можешь прийти за ней." +
-            " Наш адрес: г. Кропивницкий, переулок Васильевский 10, 5 этаж." +
-            " Лучше предварительно прозвонить и предупредить нас, чтоб " +
-            " не попасть в неловкую ситуацию. Тел. 099 196 24 69"+
-            " \n\n"+
-            "******************\n"+
-            "Кстати, если вы читаете этот текст, то автор сайта еще не отсылает ajax запрос на увеличение количества кликов на кнопку по этой книге"
-        );
-    }
-});

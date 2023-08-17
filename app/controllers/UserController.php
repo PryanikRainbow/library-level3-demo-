@@ -6,6 +6,7 @@ use function app\models\getCountRowsBooks;
 use function app\models\getDataBook;
 use function app\models\getDataBooks;
 use function app\models\incrementWantsCounter;
+use function app\models\getWantsCounter;
 
 require_once __DIR__ . '/../../includes/render.php';
 require_once 'Controller.php';
@@ -87,9 +88,10 @@ class UserController extends Controller
 
     private function rewriteWantsCounter($id)
     {
-        echo "wants+1";
-        incrementWantsCounter($id);
-    }
+    incrementWantsCounter($id);
+    $newWantsCounter = getWantsCounter($id);
+    echo $newWantsCounter;
+}
 
 }
 
