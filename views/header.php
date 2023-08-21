@@ -35,7 +35,7 @@
                             <form action="/books/" method="get" class="navbar-form navbar-right">
                                 <div class="form-group">
                                 <label for="search_type" class="inline-label"></label>
-                                    <select name="select-by" id="search_type">
+                                    <select name="select-by" id="dropdown">
                                         <option value="title">название</option>
                                         <option value="author">автор</option>
                                         <option value="year">год</option>

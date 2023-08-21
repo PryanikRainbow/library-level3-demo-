@@ -100,29 +100,45 @@ body a:hover {
   border-top: 0;
   border-bottom: 0;
   width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  vertical-align: middle;
+  display: flex; /* Застосовуємо flexbox для вирівнювання */
 }
 
 .header-wrapper .navbar .main-menu .navbar-form .form-group {
   width: 100%;
-  display: flex;
-  flex-wrap: nowrap; /* Додайте це, щоб уникнути переносу елементів */
-  justify-content: center; /* Додайте це, щоб розмістити елементи в центрі */
-  align-items: center; /* Додайте це, щоб вирівняти вертикально */
-}
-
-.header-wrapper .navbar .main-menu .navbar-form #search {
-  width: 100%;
-  padding-left: 30px;
-}
-
-.header-wrapper .navbar .main-menu .navbar-form #search_type {
-  width: 20%;
-  padding-left: 30px;
+  position: relative;
   text-align: center;
+  align-items: center;
+  /* vertical-align: middle; */
+  display: flex;
+  margin-top: 20px;
+ 
 }
+
+ #search {
+  /*тут???*/
+  width: 50%;
+  /* Збільшено ширину для поля пошуку */
+  padding: 5px 15px;
+  /* Змінено padding для відступів внутрішньо елемента */
+  margin-right: 5px;
+  /* Додано відступ справа */
+  /* width: 100%;
+  padding-left: 30px; */
+}
+
+ #dropdown {
+  /*тут*/
+  height: 34px;
+  width: 20%;
+  text-align: center;
+  margin-right: 5px;
+  /* vertical-align: middle; */
+  /* padding-left: 30px; */
+  /* padding: 0 10px;  */
+
+}
+
 
 .header-wrapper .navbar .main-menu .navbar-form .bAutoComplete {
   height: auto;
@@ -132,9 +148,14 @@ body a:hover {
   box-shadow: 0 2px 10px -2px rgba(0, 0, 0, 0.7);
 }
 
-.header-wrapper .navbar .main-menu .navbar-form #search_btn {
-  margin-left: 10px;
-  display: none;
+.header-wrapper .navbar .main-menu .navbar-form .search_btn {
+  /*тут*/
+  width: 15%;
+  height: 34px;
+  /* padding: 0 10px; */
+  line-height: 34px;
+  text-align: center;
+  vertical-align: middle;
 }
 
 .header-wrapper .navbar .main-menu .navbar-form .mSearchAutoComplete {
@@ -400,7 +421,8 @@ body a:hover {
   margin-right: 10px;
 }
 
-#viewsCounter, #wantsCounter  {
+#viewsCounter,
+#wantsCounter {
   display: inline-block;
   padding: 5px 10px;
   border: 2px solid #34b96c;
