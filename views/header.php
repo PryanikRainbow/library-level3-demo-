@@ -30,21 +30,19 @@
                     <div class="logo"><a href="/" class="navbar-brand"><span class="sh">Ш</span><span class="plus">++</span></a></div>
                 </div>
                 <div class="col-xs-12 col-sm-7 col-md-8 col-lg-8">
-                    <div class="main-menu">
+                <div class="main-menu">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <form class="navbar-form navbar-right">
+                            <form action="/books/" method="get" class="navbar-form navbar-right">
                                 <div class="form-group">
-                                    <input id="search" type="text" placeholder="Найти книгу" class="form-control">
-                                    <script>
-                                      $("#search").bind("keypress", function (e) {
-                                          if (e.keyCode == 13) {
-                                              e.preventDefault();
-                                              alert("а вот это придется сделать самому. Ваш @rshmelev");
-                                          }
-                                      })
-                                    </script>
-                                    <div class="loader"><img src="/public/images/loading.gif"></div>
-                                    <div id="list" size="" class="bAutoComplete mSearchAutoComplete"></div>
+                                <label for="search_type" class="inline-label"></label>
+                                    <select name="select-by" id="search_type">
+                                        <option value="title">название</option>
+                                        <option value="author">автор</option>
+                                        <option value="year">год</option>
+                                    </select>
+                                    <input id="search" type="text" name="search" placeholder="Найти книгу" class="form-control">
+                                    <input type="hidden" name="offset" value="0">
+                                    <input type="submit" value="Знайти" class="search_btn">
                                 </div>
                             </form>
                         </div>

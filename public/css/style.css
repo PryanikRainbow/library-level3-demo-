@@ -92,7 +92,7 @@ body a:hover {
 }
 
 .header-wrapper .navbar .main-menu {
-  text-align: right;
+  text-align: center;
   line-height: 73px;
 }
 
@@ -100,16 +100,28 @@ body a:hover {
   border-top: 0;
   border-bottom: 0;
   width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .header-wrapper .navbar .main-menu .navbar-form .form-group {
   width: 100%;
-  position: relative;
+  display: flex;
+  flex-wrap: nowrap; /* Додайте це, щоб уникнути переносу елементів */
+  justify-content: center; /* Додайте це, щоб розмістити елементи в центрі */
+  align-items: center; /* Додайте це, щоб вирівняти вертикально */
 }
 
 .header-wrapper .navbar .main-menu .navbar-form #search {
   width: 100%;
   padding-left: 30px;
+}
+
+.header-wrapper .navbar .main-menu .navbar-form #search_type {
+  width: 20%;
+  padding-left: 30px;
+  text-align: center;
 }
 
 .header-wrapper .navbar .main-menu .navbar-form .bAutoComplete {
