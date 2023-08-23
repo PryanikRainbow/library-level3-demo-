@@ -1,7 +1,8 @@
 <?php
 
-namespace app\controllers;
-require_once 'Controller.php';
+namespace App\Controllers;
+require __DIR__ . '/../../vendor/autoload.php';
+// require_once 'Controller.php';
 
 class ErrorController extends Controller
 {

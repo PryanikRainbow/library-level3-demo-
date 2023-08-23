@@ -8,6 +8,12 @@ class CounterType {
     const VIEWS = 'views';
 }
 
+class SearchType {
+    const TITLE = 'title';
+    const AUTHOR = 'author';
+    const YEAR = 'author';
+}
+
 function render($template, $data = null)
 {
     if ($data != null) {
@@ -32,8 +38,6 @@ function isLastBooksPage($countBooks, $next){
 
     return $next > $maxOffset? true : false;
 }
-
-
 
 function e($value) {
     return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');

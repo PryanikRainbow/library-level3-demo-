@@ -32,7 +32,7 @@
                 <div class="col-xs-12 col-sm-7 col-md-8 col-lg-8">
                 <div class="main-menu">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <form action="/books/" method="get" class="navbar-form navbar-right">
+                            <form action="/" method="get" class="navbar-form navbar-right">
                                 <div class="form-group">
                                 <label for="search_type" class="inline-label"></label>
                                     <select name="select-by" id="dropdown">

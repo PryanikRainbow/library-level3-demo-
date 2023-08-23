@@ -1,13 +1,27 @@
 <?php
 
+// use App\Controllers\SearchController;
+// use Includes\RouteHelper;
+
+require __DIR__ . '/vendor/autoload.php';
+
+
+// use App\Controllers\UserController;
+// use App\Controllers\SearchController;
+// use App\Controllers\ErrorController;
+// use Includes\RouteHelper;  
+
+// use App\Controllers\UserController;
 // require_once __DIR__.'/app/controllers/UserController.php';
-require_once 'app/controllers/UserController.php';
-require_once 'app/controllers/ErrorController.php';
-require_once 'includes/requestBookChecking.php';
+// require_once 'app/controllers/UserController.php';
+// require_once 'app/controllers/SearchController.php';
+// require_once 'app/controllers/ErrorController.php';
+
 // require_once 'app/controllers/AdminController.php';
 
-use app\controllers\UserController; 
-use app\controllers\ErrorController; 
+// use app\controllers\UserController; 
+// use app\controllers\SearchController; 
+// use app\controllers\ErrorController; 
 
 const EXPECTED_BOOKS_TEMPLATE = 'books-page';
 const EXPECTED_BOOK_TEMPLATE = 'book-page';
@@ -17,29 +31,68 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 $requestURI = $_SERVER ['REQUEST_URI' ];
-$userController = new UserController;
+$userController = new \App\Controllers\UserController;
+$searchController = new \App\Controllers\SearchController;
+$errorController = new \App\Controllers\ErrorController;
+$route = new \Includes\RouteHelper; 
 
-///views/book-page.php?id=1
-if ($requestURI === "/") {
-     $userController -> defineController(EXPECTED_BOOKS_TEMPLATE,0);
-} elseif(route("/book/", $requestURI) && isNumParam()){
-    //початк урі, гет передаємл
-   $userController->defineController(EXPECTED_BOOK_TEMPLATE, (int)getParam());
-} elseif(route("/offset/", $requestURI) && isNumParam()){
-    $userController->defineController(EXPECTED_BOOKS_TEMPLATE, (int)getParam());
-} elseif(route("/ajax/wants-click/", $requestURI) && isNumParam()){
-    $userController->defineController('/ajax/wants-click/', (int)getParam());
-} elseif(route("/ajax/views-count/", $requestURI) && isNumParam()){
-    $userController->defineController('/ajax/views-count/', (int)getParam());
-} elseif($requestURI === '/views/error.php'){
-    echo "views error";
-    ErrorController::printErrorPage();
-} elseif($requestURI === '/admin/a.php'){
-   require_once __DIR__.'/app/controllers/AdminController.php';
-} else {
+// $router = new \Includes\Router;
+// $currentRoute = $router->match($requestURI);
+
+// if ($currentRoute) {
+//     $action = $currentRoute->action;
+//     $params = $currentRoute->params;
+
+//     $userController->defineController($action, $p);
+// }
+
+// if ("/" === $requestURI) {
+//     $userController->defineController("printBooks", 0);
+// }
+
+// $requestURI = '/counter/';
+
+
+if ($route::simpleRoute("/", $requestURI)) {
+    $userController->defineController($route::getAction(), 0);
+}
+elseif ($route::simpleRoute('/counter/', $requestURI)) {
+
+    $userController->defineController($route::getAction());
+}
+elseif ($route::simpleRoute("/book/", $requestURI) && $route::isNumParam()) {
+    $userController->defineController($route::getAction(), $route::getParams());
+}
+
+// elseif ($route::simpleRoute("/?", $requestURI)) {
+//     $userController->defineController(EXPECTED_BOOKS_TEMPLATE, );
+// }
+// elseif($route::queryRoute($requestURI)){
+//     $userController->defineController($route::getAction(), $route::getParams());
+// }
+// elseif ($route::simpleRoute("/books/?", $requestURI)) {
+//     $userController->defineController(EXPECTED_BOOKS_TEMPLATE,0);
+// }elseif ($route::simpleRoute("/book/", $requestURI) && $route::isNumParam()){
+//     //початк урі, гет передаємл
+//    $userController->defineController(EXPECTED_BOOK_TEMPLATE, (int)$route::getParam());
+// } elseif($route::simpleRoute("/offset/", $requestURI) && $route::isNumParam()){
+//     $userController->defineController(EXPECTED_BOOKS_TEMPLATE, (int)$route::getParam());
+ elseif($route::simpleRoute("/ajax/wants-click/", $requestURI) && $route::isNumParam()){
+    $userController->defineController('/ajax/wants-click/', (int)($route::getParams()[0]));
+} elseif($route::simpleRoute("/ajax/views-count/", $requestURI) && $route::isNumParam()){
+    $userController->defineController('/ajax/views-count/', (int)($route::getParams()[0]));
+} 
+//elseif($route::simpleRoute("/search/by-title/", $requestURI) ){
+//     $searchController->defineController("/search/by-title/",$route::getParam());
+// } elseif($requestURI === '/views/error.php'){
+//     echo "views error";
+//     $errorController::printErrorPage();
+// } elseif($requestURI === '/admin/a.php'){
+//    require_once __DIR__.'/app/controllers/AdminController.php';
+// }
+else {
     echo 'else';
-    $errorController = new ErrorController('error.php');
-    $errorController -> printErrorPage();
+    $errorController->printErrorPage();
 }
 
 // elseif(route("/offset/", $requestURI) && isNumParam()){

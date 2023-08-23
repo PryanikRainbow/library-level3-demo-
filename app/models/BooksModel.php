@@ -1,9 +1,10 @@
 <?php
 
-namespace app\models;
+namespace App\Models;
 
-require __DIR__ . '/ConnectDB.php';
-use app\models\ConnectDB;
+require __DIR__ . '/../../vendor/autoload.php';
+// require __DIR__ . '/ConnectDB.php';
+// use App\Models\ConnectDB;
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -52,7 +53,7 @@ function getCountRowsBooks()
 
     // $db = ConnectDB::getInstance();
     $query = (file_get_contents(__DIR__ . '/../../db/count_rows_books_table.sql'));
-    var_dump($query);
+    // var_dump($query);
 
     $result = $db->query($query);
 

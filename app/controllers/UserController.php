@@ -1,20 +1,22 @@
 <?php
 
-namespace app\controllers;
+namespace App\Controllers;
 
-use CounterType;
+require __DIR__ . '/../../vendor/autoload.php';
 
-use function app\models\getCountRowsBooks;
-use function app\models\getDataBook;
-use function app\models\getDataBooks;
-use function app\models\incrementCounter;
-use function app\models\getCounter;
+use function App\Models\getCountRowsBooks;
+use function App\Models\getDataBook;
+use function App\Models\getDataBooks;
+use function App\Models\incrementCounter;
+use function App\Models\getCounter;
 
 
 require_once __DIR__ . '/../../includes/render.php';
-require_once 'Controller.php';
-require __DIR__ . '/../models/BooksModel.php';
-require __DIR__ . '/../models/BookModel.php';
+// require_once 'Controller.php';
+// require __DIR__ . '/../models/BooksModel.php';
+// require __DIR__ . '/../models/BookModel.php';
+
+use CounterType;
 
 
 error_reporting(E_ALL);
@@ -28,47 +30,52 @@ ini_set('display_errors', 1);
 
 class UserController extends Controller
 {
-    public function defineController($action, $numParam=null)
-    {
-        switch ($action) {
-            case 'books-page':
-                $this -> printBooksPage($action, $numParam);
-                break;
-            case 'book-page':
-                $this -> printBookPage($action, $numParam);
-                break;
-            case '/ajax/wants-click/':
-                $this -> rewriteCounter($numParam, CounterType::WANTS);
-                break;
-            case '/ajax/views-count/':
-                $this -> rewriteCounter($numParam, CounterType::VIEWS);
-                break;
-            default:
-                render(USER_TEMPLATE_PATH . "error.php");
-                break;
-        }
+    public function defineController($action, $params = null){
+        return method_exists($this, $action)
+        ? $this->$action($action, $params)
+        : render(USER_TEMPLATE_PATH . '/error.php');
     }
+    // public function defineController($action, $param)
+    // {
+    //     switch ($action) {
+    //         case 'books-page':
+    //             $this -> books($action, $param);
+    //             break;
+    //         case 'book-page':
+    //             $this -> printBookPage($action, $param);
+    //             break;
+    //         case '/ajax/wants-click/':
+    //             $this -> rewriteCounter($param, CounterType::WANTS);
+    //             break;
+    //         case '/ajax/views-count/':
+    //             $this -> rewriteCounter($param, CounterType::VIEWS);
+    //             break;
+    //         default:
+    //             render(USER_TEMPLATE_PATH . "error.php");
+    //             break;
+    //     }
+    // }
 
-    private function printBooksPage($action, $offsetCurrent = 0)
+    private function printBooks($action, $offsetCurrent = 0)
     {
         // echo "printBooksMethod";
 
         $dataBooks = getDataBooks(LIMIT, $offsetCurrent);
         $pre = $offsetCurrent !== 0 ? $offsetCurrent - OFFSET_DEFAULT : 0;
         $next = $offsetCurrent + OFFSET_DEFAULT;
-        echo getCountRowsBooks();
+        // echo getCountRowsBooks();
 
         if ($dataBooks != false) {
             $dataTemplate = [
               'dataBooks' => $dataBooks,
               'pre' => $pre,
               'next' => $next,
-              'isFirstPage' => isFirstBooksPage($pre, $next),
-              'isLastPage' => isLastBooksPage(getCountRowsBooks(), $next)
+              'isFirstPage' => isFirstBooksPage($pre, $next, $searchType = null, $param = null),
+              'isLastPage' => isLastBooksPage(getCountRowsBooks(), $next, $searchType = null, $param = null)
             ];
 
             render(USER_TEMPLATE_PATH . '/header.php');
-            render(USER_TEMPLATE_PATH . '/' . $action . '.php', $dataTemplate);
+            render(USER_TEMPLATE_PATH . '/books-page.php', $dataTemplate);
             render(USER_TEMPLATE_PATH . '/footer.php');
         } else {
             render(USER_TEMPLATE_PATH . '/error.php');
@@ -77,14 +84,14 @@ class UserController extends Controller
     }
 
     //роутери, контролел, ДБ,
-    private function printBookPage($action, $id)
+    private function printBook($action, $params)
     {
         //спробувати витягнути з БД парам. Якщо не вийде, помилку
         echo "book";
-        $dataBook = getDataBook($id);
+        $dataBook = getDataBook($params[0]);
         if ($dataBook != false) {
             render(USER_TEMPLATE_PATH . '/header.php');
-            render(USER_TEMPLATE_PATH . $action . '.php', $dataBook);
+            render(USER_TEMPLATE_PATH . 'book-page.php', $dataBook);
             render(USER_TEMPLATE_PATH . '/footer.php');
         } else {
             // echo "not found!";
@@ -92,10 +99,14 @@ class UserController extends Controller
         }
     }
 
-    private function rewriteCounter($id, $counterType)
+    private function printCounter($action, $params)
     {
+        $id = $_POST['id'];
+        $counterType = $_POST['counter-type'];
+
         incrementCounter($id, $counterType);
         $newCounter = getCounter($id, $counterType);
+
         echo $newCounter;
     }
 

@@ -1,9 +1,9 @@
 <?php
 
-namespace app\models;
+namespace App\Models;
 
 require_once __DIR__ . '/ConnectDB.php';
-use app\models\ConnectDB;
+// use App\Models\ConnectDB;
 
 
 error_reporting(E_ALL);
@@ -42,7 +42,7 @@ ini_set('display_errors', 1);
 
     function getCounter($id, $counterType){
         $db = ConnectDB::getInstance();
-        $query = file_get_contents(__DIR__ . '/../../db/select_'  . $counterType . 'Counter.sql');
+        $query = file_get_contents(__DIR__ . '/../../db/select_' . $counterType . 'Counter.sql');
         
         $stmt = $db->prepare($query);
         $stmt -> bind_param('i', $id);
@@ -51,7 +51,7 @@ ini_set('display_errors', 1);
             $result = $stmt->get_result();
             $row = $result->fetch_row();
             if ($row) {
-                return (int)$row[0]; // Повертаємо перший стовпець як число
+                return (int)$row[0]; 
             }
         } 
     }

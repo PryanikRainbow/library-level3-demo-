@@ -68,21 +68,18 @@ var bookId;
 // });
 
 $(document).ready(function() {
-    // Отримуємо елемент лічильника переглядів
-      let viewsCounterElement = $("#viewsCounter");
-
-    // Отримуємо ID книги з атрибуту 'book-id' елемента
     let bookId = $("#id").attr("book-id");
 
-    // Виконуємо AJAX-запит при відкритті сторінки
     $.ajax({
-        type: "POST",
-        url: "/ajax/views-count/" + bookId, // Ваш роут для оновлення лічильника
-        data: { id: bookId }, // Відправляємо ID книги на сервер
+        url: '/counter/', 
+        method: 'POST',
+        data: {
+            "counter-type": "views",
+            "id": bookId
+        },
+
         success: function(response) {
             let newViewsCounter = parseInt(response);
-            // Успішний відгук з сервера
-            // Оновлюємо значення лічильника на сторінці
             $('#viewsCounter').text(newViewsCounter);
         }
     });
@@ -91,12 +88,15 @@ $(document).ready(function() {
 $('.btnBookID').click(function(event) {
     event.preventDefault();
     
-    let bookId = $(this).data('book-id'); // Отримання ID з атрибуту data
+    let bookId = $(this).data('book-id'); 
     
     $.ajax({
-        url: ' /ajax/wants-click/' + bookId, // Додаємо ID до URL-шляху
+        url: '/counter/', 
         method: 'POST',
-        data: { action: 'wantsButtonClick' },
+        data: {
+            "counter-type": "wants",
+            "id": bookId
+        },
         
         success: function(response) {
             let newWantsCounter = parseInt(response);

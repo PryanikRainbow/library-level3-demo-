@@ -1,0 +1,17 @@
+{
+    "require": {
+        "vlucas/phpdotenv": "^5.5"
+    },
+    "autoload": {
+        "files": [
+            "app/models/BookModel.php",
+            "app/models/BooksModel.php"
+        ],
+        
+        "psr-4": {
+            "App\\Controllers\\": "app/controllers/",
+            "App\\Models\\": "app/models/",
+            "Includes\\": "includes/"
+        }
+    } 
+}
