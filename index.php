@@ -53,35 +53,22 @@ $route = new \Includes\RouteHelper;
 // $requestURI = '/counter/';
 
 
+//потім щось треба придумати, коли додасться delete
+
+
 if ($route::simpleRoute("/", $requestURI)) {
-    $userController->defineController($route::getAction(), 0);
+    $userController->defineController($route::getObject(),  ["offset" => 0] );
 }
 elseif ($route::simpleRoute('/counter/', $requestURI)) {
-
-    $userController->defineController($route::getAction());
+    $userController->defineController($route::getObject());
 }
 elseif ($route::simpleRoute("/book/", $requestURI) && $route::isNumParam()) {
-    $userController->defineController($route::getAction(), $route::getParams());
-}
+    $userController->defineController($route::getObject(), $route::getParams());
+} elseif($route::queryRoute($requestURI) && $route::isUserController()){
+    $object = $route::getObject();
 
-// elseif ($route::simpleRoute("/?", $requestURI)) {
-//     $userController->defineController(EXPECTED_BOOKS_TEMPLATE, );
-// }
-// elseif($route::queryRoute($requestURI)){
-//     $userController->defineController($route::getAction(), $route::getParams());
-// }
-// elseif ($route::simpleRoute("/books/?", $requestURI)) {
-//     $userController->defineController(EXPECTED_BOOKS_TEMPLATE,0);
-// }elseif ($route::simpleRoute("/book/", $requestURI) && $route::isNumParam()){
-//     //початк урі, гет передаємл
-//    $userController->defineController(EXPECTED_BOOK_TEMPLATE, (int)$route::getParam());
-// } elseif($route::simpleRoute("/offset/", $requestURI) && $route::isNumParam()){
-//     $userController->defineController(EXPECTED_BOOKS_TEMPLATE, (int)$route::getParam());
- elseif($route::simpleRoute("/ajax/wants-click/", $requestURI) && $route::isNumParam()){
-    $userController->defineController('/ajax/wants-click/', (int)($route::getParams()[0]));
-} elseif($route::simpleRoute("/ajax/views-count/", $requestURI) && $route::isNumParam()){
-    $userController->defineController('/ajax/views-count/', (int)($route::getParams()[0]));
-} 
+    $userController->defineController($route::getObject(), $route::getParams());
+}
 //elseif($route::simpleRoute("/search/by-title/", $requestURI) ){
 //     $searchController->defineController("/search/by-title/",$route::getParam());
 // } elseif($requestURI === '/views/error.php'){

@@ -17,7 +17,7 @@ ini_set('display_errors', 1);
 //echo getCountRowsBooks();
 // $db = ConnectDB::getInstance();
 
-function getDataBooks($limit, $offset)
+function getDataBooks($limit, $offset, $searchType = null, $input = null)
 {
     // global $db;
     $db = ConnectDB::getInstance();
@@ -27,18 +27,10 @@ function getDataBooks($limit, $offset)
     $stmt->bind_param("ii", $limit, $offset);
 
     if ($stmt->execute()) {
-        $dataBooksArray = [];
+        // $dataBooksArray = [];
         $result = $stmt->get_result();
 
-        while($row = $result->fetch_assoc()) {
-            //в масив додаємо масив асоціативних масивів(або пар)
-            $dataBooksArray[] = [
-                "id" => $row["id"],
-                "img" => $row["img"],
-                "title" => $row["title"],
-                "author" => $row["author"]
-            ];
-        }
+        $dataBooksArray = $result->fetch_all(MYSQLI_ASSOC);
 
         return $dataBooksArray;
     }

@@ -1,5 +1,11 @@
 <?php
 
+const SEARCH_OPTIONS =  [
+    "title" => "Название",
+    "author" => "Автор",
+     "year" => "Год"
+];
+
 const LIMIT = 20;
 const OFFSET_DEFAULT = 10;
  

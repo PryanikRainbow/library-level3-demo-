@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+
+<?php render(__DIR__ . '/header.php');?>
+
 <html lang="ru">
 
     <section id="main" class="main-wrapper">
@@ -57,6 +60,8 @@
             </div>
         </div>
     </section>
+
+<?php render(__DIR__ . '/footer.php');?>
 
 
 </html>

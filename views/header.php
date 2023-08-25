@@ -34,13 +34,14 @@
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             <form action="/" method="get" class="navbar-form navbar-right">
                                 <div class="form-group">
-                                <label for="search_type" class="inline-label"></label>
                                     <select name="select-by" id="dropdown">
-                                        <option value="title">название</option>
-                                        <option value="author">автор</option>
-                                        <option value="year">год</option>
+                                        <?php
+                                            foreach (SEARCH_OPTIONS as $value => $label) {
+                                                echo "<option value='$value'>$label</option>";
+                                            }
+                                        ?>
                                     </select>
-                                    <input id="search" type="text" name="search" placeholder="Найти книгу" class="form-control">
+                                    <input id="search" type="text" name="search-book" placeholder="Найти книгу" class="form-control">
                                     <input type="hidden" name="offset" value="0">
                                     <input type="submit" value="Знайти" class="search_btn">
                                 </div>

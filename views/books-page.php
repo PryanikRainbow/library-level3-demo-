@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 
+<?php render(__DIR__ . '/header.php');?>
+
 <!-- saved from url=(0054)file:///home/andy/Desktop/books-page/shpp-library.html -->
 <html lang="ru">
 
@@ -27,5 +29,6 @@
 
     </section>
 
+    <?php render(__DIR__ . '/footer.php');?>
 
 </html>
