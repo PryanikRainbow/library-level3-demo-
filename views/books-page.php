@@ -7,6 +7,12 @@
 
     <section id="main" class="main-wrapper">
 
+       <?php 
+       if ($searchMessage !== false){
+        echo '<div class="searchMessage">' . e($searchMessage) . '</div>';
+       }
+       ?>
+    
         <div class="container">
             <div id="content" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
@@ -18,15 +24,25 @@
                 
             </div>
         </div>
-        <center>
-           <a href=" <?= '/offset/' . $pre ?>">
-           <button type="button" class="details btn btn-success" <?= $isFirstPage == true ? 'disabled' : '' ?>>Назад</button>
-            </a>
-            <a href=" <?= '/offset/' . $next ?>"> 
-            <button type="button" class="details btn btn-success" <?= $isLastPage == true ? 'disabled' : '' ?>>Вперед</button>
-            </a>
-        </center>
 
+        <center>
+           <?php if ($searchMessage != false) : ?>
+               <a href="/?select-by=<?= urlencode($_GET['select-by']) ?>&search-book=<?= urlencode($_GET['search-book']) ?>&offset=<?= $pre ?>">
+                    <button type="button" class="details btn btn-success" <?= $isFirstPage == true ? 'disabled' : '' ?>>Назад</button>
+                </a>
+                <a href="/?select-by=<?= urlencode($_GET['select-by']) ?>&search-book=<?= urlencode($_GET['search-book']) ?>&offset=<?= $next ?>"> 
+                   <button type="button" class="details btn btn-success" <?= $isLastPage == true ? 'disabled' : '' ?>>Вперед</button>
+                </a>
+            <?php else : ?>
+                <a href="/?offset=<?= urlencode($pre) ?>">
+                    <button type="button" class="details btn btn-success" <?= $isFirstPage == true ? 'disabled' : '' ?>>Назад</button>
+                 </a>
+                 <a href="/?offset=<?= urlencode($next) ?>"> 
+                    <button type="button" class="details btn btn-success" <?= $isLastPage == true ? 'disabled' : '' ?>>Вперед</button>
+                 </a>
+             <?php endif; ?>
+             </center>
+ 
     </section>
 
     <?php render(__DIR__ . '/footer.php');?>

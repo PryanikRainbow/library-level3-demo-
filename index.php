@@ -55,7 +55,6 @@ $route = new \Includes\RouteHelper;
 
 //потім щось треба придумати, коли додасться delete
 
-
 if ($route::simpleRoute("/", $requestURI)) {
     $userController->defineController($route::getObject(),  ["offset" => 0] );
 }
@@ -64,7 +63,8 @@ elseif ($route::simpleRoute('/counter/', $requestURI)) {
 }
 elseif ($route::simpleRoute("/book/", $requestURI) && $route::isNumParam()) {
     $userController->defineController($route::getObject(), $route::getParams());
-} elseif($route::queryRoute($requestURI) && $route::isUserController()){
+}
+ elseif($route::queryRoute($requestURI) && $route::isUserController()){
     $object = $route::getObject();
 
     $userController->defineController($route::getObject(), $route::getParams());

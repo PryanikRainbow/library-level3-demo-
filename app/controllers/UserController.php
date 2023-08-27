@@ -2,27 +2,17 @@
 
 namespace App\Controllers;
 
-require __DIR__ . '/../../vendor/autoload.php';
+use App\Models\BookModel;
 
-use function App\Models\getCountRowsBooks;
+require __DIR__ . '/../../vendor/autoload.php';
 use function App\Models\getDataBook;
-use function App\Models\getDataBooks;
+// use function App\Models\getDataBooks;
 use function App\Models\incrementCounter;
 use function App\Models\getCounter;
 
 require_once __DIR__ . '/../../includes/render.php';
-// require_once 'Controller.php';
-// require __DIR__ . '/../models/BooksModel.php';
-// require __DIR__ . '/../models/BookModel.php';
-
-use CounterType;
-
-// error_reporting(E_ALL);
-// ini_set('display_errors', 1);
 
 const USER_TEMPLATE_PATH = __DIR__ . '/../../views/';
-//дані має витягувати контролер (до моделей)
-
 
 class UserController extends Controller
 {
@@ -30,52 +20,46 @@ class UserController extends Controller
     {
         $action = "print$obj";
         return method_exists($this, $action)
-        ? $this->$action($action, $params)
-        : render(USER_TEMPLATE_PATH . '/error.php');
+            ? $this->$action($action, $params)
+            : render(USER_TEMPLATE_PATH . '/error.php');
     }
-    // public function defineController($action, $param)
-    // {
-    //     switch ($action) {
-    //         case 'books-page':
-    //             $this -> books($action, $param);
-    //             break;
-    //         case 'book-page':
-    //             $this -> printBookPage($action, $param);
-    //             break;
-    //         case '/ajax/wants-click/':
-    //             $this -> rewriteCounter($param, CounterType::WANTS);
-    //             break;
-    //         case '/ajax/views-count/':
-    //             $this -> rewriteCounter($param, CounterType::VIEWS);
-    //             break;
-    //         default:
-    //             render(USER_TEMPLATE_PATH . "error.php");
-    //             break;
-    //     }
-    // }
 
     private function printBooks($action, $params)
     {
         // echo $action . PHP_EOL;
         // var_dump($params);
         // echo "printBooksMethod";
+        $booksModel = new \App\Models\BooksModel();
 
-        $dataBooks = $this->selectDataBooks($params);
-        // $pre = $offsetCurrent !== 0 ? $offsetCurrent - OFFSET_DEFAULT : 0;
-        // $next = $offsetCurrent + OFFSET_DEFAULT;
-        // echo getCountRowsBooks();
+        $dataBooks = $this->selectDataBooks($params, $booksModel);
 
-        if ($dataBooks != false) {
+        // echo PHP_EOL;
+        // echo PHP_EOL;
+        // var_dump($dataBooks);
+
+        if ($dataBooks !== false &&
+            isValidOffset($params['offset'], $this->countBooks($params, $booksModel))
+        ) {
+
+            $offset = $params['offset'];
+            $pre = $offset >= OFFSET_DEFAULT ? $offset - OFFSET_DEFAULT : 0;
+
+            $next = $offset + OFFSET_DEFAULT;
+            $countBooks = $this->countBooks($params, $booksModel);
+
             $dataTemplate = [
-              'dataBooks' => $dataBooks,
-              'pre' => $pre,
-              'next' => $next,
-              'isFirstPage' => isFirstBooksPage($pre, $next, $searchType = null, $param = null),
-              'isLastPage' => isLastBooksPage(getCountRowsBooks(), $next, $searchType = null, $param = null)
+                'dataBooks' => $dataBooks,
+                'pre' => $pre,
+                'next' => $next,
+                'isFirstPage' => isFirstBooksPage($pre, $next),
+                'isLastPage' => isLastBooksPage($countBooks, $next),
+                'searchMessage' => searchMessage($params, $countBooks)
             ];
 
             render(USER_TEMPLATE_PATH . '/books-page.php', $dataTemplate);
         } else {
+            // Тут має бути помилка якщо не тру оффсет
+            echo "(((";
             render(USER_TEMPLATE_PATH . '/error.php');
         }
 
@@ -84,8 +68,9 @@ class UserController extends Controller
     //роутери, контролел, ДБ,
     private function printBook($action, $params)
     {
+        $bookModel = new \App\Models\BookModel();
         //спробувати витягнути з БД парам. Якщо не вийде, помилку
-        $dataBook = getDataBook($params[0]);
+        $dataBook = $bookModel->getDataBook($params[0]);
         if ($dataBook != false) {
             render(USER_TEMPLATE_PATH . 'book-page.php', $dataBook);
 
@@ -98,13 +83,15 @@ class UserController extends Controller
 
     private function printCounter($action, $params)
     {
-        if (isset($_POST['id']) && isset($_POST['counter-type'])
-        && count($_POST) === 2) {
+        if (isset($_POST['id']) && isset($_POST['counter-type']) &&
+           count($_POST) === 2
+        ) {
             $id = $_POST['id'];
             $counterType = $_POST['counter-type'];
 
-            incrementCounter($id, $counterType);
-            $newCounter = getCounter($id, $counterType);
+            $bookModel = new \App\Models\BookModel();
+            $bookModel->incrementCounter($id, $counterType);
+            $newCounter = $bookModel->getCounter($id, $counterType);
 
             echo $newCounter;
         } else {
@@ -112,34 +99,31 @@ class UserController extends Controller
         }
     }
 
-    private function selectDataBooks($params)
+    private function selectDataBooks($params, $booksModel)
     {
-        if($this->isAllBooks($params)) {
+        // $booksModel = new \App\Models\BooksModel();
+
+        if(isAllBooks($params)) {
             // if (empty($params['offset'])) {
             //     $params['offset'] = 0;
             // }
-            return getDataBooks(LIMIT, $params['offset']);
+            return $booksModel->getDataBooks(LIMIT, $params['offset']);
         }
-        if ($this->isBooksBySearch($params)) {
-            return getDataBooks(LIMIT, $params['offset'], $params['select-by'], ['search-book'], $params['offset']);
+        if (isBooksBySearch($params)) {
+            if($params['search-book'] !== '') {
+                return $booksModel->getDataBooks(LIMIT, $params['offset'], $params['select-by'], $params['search-book'], $params['offset']);
+            } else {
+                //потім переглянути
+                return $booksModel->getDataBooks(LIMIT, $params['offset']);
+            }
         }
-        //return error?
+        return false;
+        //return error
 
     }
 
-    private function isAllBooks($params)
-    {
-        return  count($params) === 1 && isset($params['offset']);
-    }
-
-    private function isBooksBySearch($params)
-    {
-//подумать, що робити, якщо пошук пустий або тип пошуку
-        return count($params) === 3 &&
-               isset($params['select-by']) && 
-               in_array($params['select-by'], array_keys(SEARCH_OPTIONS)) &&
-               isset($params['search-book']) && !empty($params['search-book']) &&
-               isset($params['offset']);
+    private function countBooks($params, $booksModel){
+       return $booksModel->getCountRowsBooks(isAllBooks($params), isBooksBySearch($params));
     }
 
 }

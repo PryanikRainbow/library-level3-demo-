@@ -1,0 +1,1 @@
+SELECT COUNT(*) FROM books WHERE author LIKE CONCAT('%', ?, '%');

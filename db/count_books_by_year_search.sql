@@ -1,0 +1,1 @@
+SELECT COUNT(*) FROM books WHERE year LIKE CONCAT('%', ?, '%');

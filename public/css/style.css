@@ -302,6 +302,10 @@ body a:hover {
   display: none;
 }
 
+.searchMessage {
+  margin-left: 10%; 
+}
+
 .main-wrapper .book_item .book {
   text-align: center;
   padding: 20px 10px;

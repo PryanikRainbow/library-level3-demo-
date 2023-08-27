@@ -3,55 +3,73 @@
 namespace App\Models;
 
 require __DIR__ . '/../../vendor/autoload.php';
-// require __DIR__ . '/ConnectDB.php';
-// use App\Models\ConnectDB;
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// const DEFAULT_COUNT_BOOKS = 20;
-// const LIMIT = 8;
-// const OFFSET = 1;
-// $offset = 8;
-
-//echo getCountRowsBooks();
-// $db = ConnectDB::getInstance();
-
-function getDataBooks($limit, $offset, $searchType = null, $input = null)
+class BooksModel
 {
-    // global $db;
-    $db = ConnectDB::getInstance();
-    $query = (file_get_contents(__DIR__ . '/../../db/select_books.sql'));
+    public function getDataBooks($limit, $offset, $searchType = null, $searchBook = null)
+    {
+        echo $offset;
+        // var_dump($searchBook);
+        // echo PHP_EOL;
+        // var_dump($searchType);
+        $db = ConnectDB::getInstance();
 
-    $stmt = $db->prepare($query);
-    $stmt->bind_param("ii", $limit, $offset);
+        if ($searchType === null || ($searchType !== null && $searchBook === '')) {
+            // echo "empty";
+            $query = (file_get_contents(__DIR__ . '/../../db/select_books.sql'));
+            $stmt = $db->prepare($query);
+            $stmt->bind_param("ii", $limit, $offset);
+        } else {
+            $query = (file_get_contents(__DIR__ . "/../../db/search_by_$searchType.sql"));
+            $stmt = $db->prepare($query);
 
-    if ($stmt->execute()) {
-        // $dataBooksArray = [];
-        $result = $stmt->get_result();
+            $stmt->bind_param("sii", $searchBook, $limit, $offset);
+        }
 
-        $dataBooksArray = $result->fetch_all(MYSQLI_ASSOC);
+        if ($stmt->execute()!=false) {
+            $result = $stmt->get_result();
+            $dataBooksArray = $result->fetch_all(MYSQLI_ASSOC);
+    // echo "exec";
+    var_dump(($offset));
+    // var_dump($dataBooksArray);
 
-        return $dataBooksArray;
+            return $dataBooksArray;
+        }
+
+        return false;
     }
 
-    return false;
-};
+    public function getCountRowsBooks($isAllBooks, $isBooksBySearch)
+    {
+        $db = ConnectDB::getInstance();
 
-function getCountRowsBooks()
-{
-   // global $db;
-    $db = ConnectDB::getInstance();
+        if ($isAllBooks === true) {
+            $query = (file_get_contents(__DIR__ . '/../../db/count_rows_books_table.sql'));
+            $result = $db->query($query);
+        } elseif ($isBooksBySearch === true) {
+            $query = (file_get_contents(__DIR__ . "/../../db/count_books_by_" . urlencode($_GET['select-by']) . "_search.sql"));
+            $result = $db->prepare($query);
+            $searchBook = urlencode($_GET['search-book']);
+            
+            $result->bind_param("s", $searchBook);
+            $result->execute();
+            $result = $result->get_result();
+        }  
 
-    // $db = ConnectDB::getInstance();
-    $query = (file_get_contents(__DIR__ . '/../../db/count_rows_books_table.sql'));
-    // var_dump($query);
+        if (isset($result) && $result && $result->num_rows === 1) {
+            $row = $result->fetch_row();
+            echo (int)$row[0];
+            return (int)$row[0];
+        }
 
-    $result = $db->query($query);
+        return false;
+    }
 
-    $row = $result->fetch_row();
-    return isset($row[0]) ? (int)$row[0] : false;
-} 
+}
+
 
 // $dataBooks = getDataBooks();
 // $dataBooksArray = [];
