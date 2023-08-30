@@ -2,40 +2,30 @@
 
 namespace App\Controllers;
 
-use App\Models\BookModel;
 
 require __DIR__ . '/../../vendor/autoload.php';
-use function App\Models\getDataBook;
-// use function App\Models\getDataBooks;
-use function App\Models\incrementCounter;
-use function App\Models\getCounter;
-
 require_once __DIR__ . '/../../includes/render.php';
+require_once __DIR__ . '/../../includes/call_migrations_files.php';
 
-const USER_TEMPLATE_PATH = __DIR__ . '/../../views/';
 
 class UserController extends Controller
 {
+
+    const USER_TEMPLATE_PATH = __DIR__ . '/../../views/';
+
     public function defineController($obj, $params = null)
     {
         $action = "print$obj";
         return method_exists($this, $action)
             ? $this->$action($action, $params)
-            : render(USER_TEMPLATE_PATH . '/error.php');
+            : render(self::USER_TEMPLATE_PATH . '/error.php');
     }
 
     private function printBooks($action, $params)
     {
-        // echo $action . PHP_EOL;
-        // var_dump($params);
-        // echo "printBooksMethod";
         $booksModel = new \App\Models\BooksModel();
 
         $dataBooks = $this->selectDataBooks($params, $booksModel);
-
-        // echo PHP_EOL;
-        // echo PHP_EOL;
-        // var_dump($dataBooks);
 
         if ($dataBooks !== false &&
             isValidOffset($params['offset'], $this->countBooks($params, $booksModel))
@@ -56,11 +46,11 @@ class UserController extends Controller
                 'searchMessage' => searchMessage($params, $countBooks)
             ];
 
-            render(USER_TEMPLATE_PATH . '/books-page.php', $dataTemplate);
+            render(self::USER_TEMPLATE_PATH . '/books-page.php', $dataTemplate);
         } else {
             // Тут має бути помилка якщо не тру оффсет
-            echo "(((";
-            render(USER_TEMPLATE_PATH . '/error.php');
+            // echo "(((";
+            render(self::USER_TEMPLATE_PATH . '/error.php');
         }
 
     }
@@ -72,12 +62,12 @@ class UserController extends Controller
         //спробувати витягнути з БД парам. Якщо не вийде, помилку
         $dataBook = $bookModel->getDataBook($params[0]);
         if ($dataBook != false) {
-            render(USER_TEMPLATE_PATH . 'book-page.php', $dataBook);
+            render(self::USER_TEMPLATE_PATH . 'book-page.php', $dataBook);
 
         } else {
             // echo "not found!";
 
-            render(USER_TEMPLATE_PATH . '/error.php');
+            render(self::USER_TEMPLATE_PATH . '/error.php');
         }
     }
 
@@ -95,7 +85,7 @@ class UserController extends Controller
 
             echo $newCounter;
         } else {
-            render(USER_TEMPLATE_PATH . '/error.php');
+            render(self::USER_TEMPLATE_PATH . '/error.php');
         }
     }
 

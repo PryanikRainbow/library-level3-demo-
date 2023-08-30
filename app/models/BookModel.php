@@ -14,7 +14,7 @@ class BookModel
     public function getDataBook($id)
     {
         $db = ConnectDB::getInstance();
-        $query = file_get_contents(__DIR__ . '/../../db/select_book_by_ID.sql');
+        $query = file_get_contents(__DIR__ . '/../../db/queries/select_book_by_ID.sql');
 
         $stmt = $db->prepare($query);
         $stmt->bind_param("i", $id);
@@ -33,7 +33,7 @@ class BookModel
     public function incrementCounter($id, $counterType)
     {
         $db = ConnectDB::getInstance();
-        $query = file_get_contents(__DIR__ . '/../../db/update_' . $counterType . 'Counter.sql');
+        $query = file_get_contents(__DIR__ . '/../../db/queries/update_' . $counterType . 'Counter.sql');
 
         $stmt = $db->prepare($query);
         $stmt->bind_param("i", $id);
@@ -48,7 +48,7 @@ class BookModel
     public function getCounter($id, $counterType)
     {
         $db = ConnectDB::getInstance();
-        $query = file_get_contents(__DIR__ . '/../../db/select_' . $counterType . 'Counter.sql');
+        $query = file_get_contents(__DIR__ . '/../../db/queries/select_' . $counterType . 'Counter.sql');
 
         $stmt = $db->prepare($query);
         $stmt -> bind_param('i', $id);
@@ -63,32 +63,3 @@ class BookModel
     }
 
 }
-
-    // function  incrementViewsCounter($id){
-    //     $db = ConnectDB::getInstance();
-    //     $query = file_get_contents(__DIR__ . '/../../db/update_viewsCounter.sql');
-    
-    //     $stmt = $db->prepare($query);
-    //     $stmt->bind_param("i", $id);
-    
-    //     if ($stmt->execute()) {
-    //         return true;
-    //     }
-    
-    //     return false;  
-    // }
-
-    // function getViewsCounter($id){
-    //     $db = ConnectDB::getInstance();
-    //     $query = file_get_contents(__DIR__ . '/../../db/select_viewsCounter.sql');
-        
-    //     $stmt = $db->prepare($query);
-    //     $stmt -> bind_param('i', $id);
-
-    //     if ($stmt -> execute()){
-    //         $result = $stmt->get_result();
-    //         $row = $result->fetch_assoc();
-    //         if ($row) return (int)$row['wantsCounter'];
-    //     }
-    //     return false; 
-    // }

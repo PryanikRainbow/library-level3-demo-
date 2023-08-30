@@ -32,8 +32,15 @@ class ConnectDB
                 self::$connect = new \mysqli(self::SERVER_NAME, self::USER_NAME, self::PASSWORD);
                 self::$connect->multi_query(file_get_contents(__DIR__ . ' /../../db/db_books.sql'));
                 while (self::$connect->next_result()) {;} 
+                callMigrations();
+
             } catch (Exception $e) {
-                echo $e->getMessage();
+                http_response_code(500);
+                echo json_encode(['error' => 'Internal Server Error']);
+                header( 'HTTP/1.1 500 Internal Server Error' );
+                header('Content-type: application/json');
+                
+                exit();
             }
         }
         

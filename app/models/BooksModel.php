@@ -12,14 +12,18 @@ class BooksModel
     public function getDataBooks($limit, $offset, $searchType = null, $searchBook = null)
     {
         $db = ConnectDB::getInstance();
+        if($db === null){
+            http_response_code(500);
+            return false;
+        };
 
         if ($searchType === null || ($searchType !== null && $searchBook === '')) {
             // echo "empty";
-            $query = (file_get_contents(__DIR__ . '/../../db/select_books.sql'));
+            $query = (file_get_contents(__DIR__ . '/../../db/queries/select_books.sql'));
             $stmt = $db->prepare($query);
             $stmt->bind_param("ii", $limit, $offset);
         } else {
-            $query = (file_get_contents(__DIR__ . "/../../db/search_by_$searchType.sql"));
+            $query = (file_get_contents(__DIR__ . "/../../db/queries/search_by_$searchType.sql"));
             $stmt = $db->prepare($query);
 
             $stmt->bind_param("sii", $searchBook, $limit, $offset);
@@ -36,14 +40,15 @@ class BooksModel
     }
 
     public function getCountRowsBooks($isAllBooks, $isBooksBySearch)
+    //if file not found
     {
         $db = ConnectDB::getInstance();
 
         if ($isAllBooks === true) {
-            $query = (file_get_contents(__DIR__ . '/../../db/count_rows_books_table.sql'));
+            $query = (file_get_contents(__DIR__ . '/../../db/queries/count_rows_books_table.sql'));
             $result = $db->query($query);
         } elseif ($isBooksBySearch === true) {
-            $query = (file_get_contents(__DIR__ . "/../../db/count_books_by_" . $_GET['select-by'] . "_search.sql"));
+            $query = (file_get_contents(__DIR__ . "/../../db/queries/count_books_by_" . $_GET['select-by'] . "_search.sql"));
             $result = $db->prepare($query);
             $searchBook = $_GET['search-book'];
             
@@ -54,7 +59,7 @@ class BooksModel
 
         if (isset($result) && $result && $result->num_rows === 1) {
             $row = $result->fetch_row();
-            // echo (int)$row[0];
+             
             return (int)$row[0];
         }
 
