@@ -11,12 +11,18 @@ namespace App\Models;
 
 class BookModel
 {
+    const SELECT_BOOK = "SELECT books.*,  GROUP_CONCAT(authors.author SEPARATOR '\n') AS author
+    FROM `books`
+    JOIN `books_authors` ON books.id = books_authors.book_id
+    JOIN `authors` ON books_authors.author_id = authors.id
+    WHERE books.id = ?
+    GROUP BY books.id";
+
     public function getDataBook($id)
     {
         $db = ConnectDB::getInstance();
-        $query = file_get_contents(__DIR__ . '/../../db/queries/select_book_by_ID.sql');
 
-        $stmt = $db->prepare($query);
+        $stmt = $db->prepare(self::SELECT_BOOK);
         $stmt->bind_param("i", $id);
 
         if ($stmt->execute()) {
@@ -33,7 +39,9 @@ class BookModel
     public function incrementCounter($id, $counterType)
     {
         $db = ConnectDB::getInstance();
-        $query = file_get_contents(__DIR__ . '/../../db/queries/update_' . $counterType . 'Counter.sql');
+        $query = 'UPDATE books
+        SET ' . $counterType . 'Counter = ' . $counterType . 'Counter + 1
+        WHERE id = ?;';
 
         $stmt = $db->prepare($query);
         $stmt->bind_param("i", $id);
@@ -48,7 +56,7 @@ class BookModel
     public function getCounter($id, $counterType)
     {
         $db = ConnectDB::getInstance();
-        $query = file_get_contents(__DIR__ . '/../../db/queries/select_' . $counterType . 'Counter.sql');
+        $query = 'SELECT ' .  $counterType . 'Counter FROM books WHERE id = ?;';
 
         $stmt = $db->prepare($query);
         $stmt -> bind_param('i', $id);
@@ -56,9 +64,8 @@ class BookModel
         if ($stmt->execute()) {
             $result = $stmt->get_result();
             $row = $result->fetch_row();
-            if ($row) {
-                return (int)$row[0];
-            }
+            if ($row) return (int)$row[0];
+            
         }
     }
 

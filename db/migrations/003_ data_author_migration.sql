@@ -1,2 +1,2 @@
-INSERT INTO authors (name) 
+INSERT INTO authors (author) 
 SELECT DISTINCT author FROM books;

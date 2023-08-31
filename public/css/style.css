@@ -385,7 +385,7 @@ body a:hover {
   font-size: 12px !important;
   line-height: 1.5 !important;
   text-align: center;
-  white-space: nowrap;
+  white-space: pre-line;
   padding: 0 0 5px 0;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -477,7 +477,7 @@ body a:hover {
   padding-bottom: 10px;
   line-height: 17px;
   font-size: 14px;
-  white-space: nowrap;
+  white-space: pre-line;
   text-overflow: ellipsis;
   overflow: hidden;
 }
