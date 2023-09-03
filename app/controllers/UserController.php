@@ -2,7 +2,6 @@
 
 namespace App\Controllers;
 
-
 require __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/../../includes/render.php';
 require_once __DIR__ . '/../../includes/call_migrations_files.php';
@@ -27,7 +26,7 @@ class UserController extends Controller
 
         $dataBooks = $this->selectDataBooks($params, $booksModel);
 
-        if ($dataBooks !== false &&
+        if (http_response_code() === 200 &&
             isValidOffset($params['offset'], $this->countBooks($params, $booksModel))
         ) {
 
@@ -36,6 +35,7 @@ class UserController extends Controller
 
             $next = $offset + OFFSET_DEFAULT;
             $countBooks = $this->countBooks($params, $booksModel);
+            echo $countBooks;
 
             $dataTemplate = [
                 'dataBooks' => $dataBooks,
@@ -48,25 +48,18 @@ class UserController extends Controller
 
             render(self::USER_TEMPLATE_PATH . '/books-page.php', $dataTemplate);
         } else {
-            // Тут має бути помилка якщо не тру оффсет
-            // echo "(((";
             render(self::USER_TEMPLATE_PATH . '/error.php');
         }
 
     }
 
-    //роутери, контролел, ДБ,
     private function printBook($action, $params)
     {
         $bookModel = new \App\Models\BookModel();
-        //спробувати витягнути з БД парам. Якщо не вийде, помилку
         $dataBook = $bookModel->getDataBook($params[0]);
-        if ($dataBook != false) {
+        if ($dataBook !== false) {
             render(self::USER_TEMPLATE_PATH . 'book-page.php', $dataBook);
-
         } else {
-            // echo "not found!";
-
             render(self::USER_TEMPLATE_PATH . '/error.php');
         }
     }
@@ -91,8 +84,6 @@ class UserController extends Controller
 
     private function selectDataBooks($params, $booksModel)
     {
-        // $booksModel = new \App\Models\BooksModel();
-
         if(isAllBooks($params)) {
             // if (empty($params['offset'])) {
             //     $params['offset'] = 0;
@@ -101,55 +92,18 @@ class UserController extends Controller
         }
         if (isBooksBySearch($params)) {
             if($params['search-book'] !== '') {
-                return $booksModel->getDataBooks(LIMIT, $params['offset'], $params['select-by'], $params['search-book'], $params['offset']);
+                return $booksModel->getDataBooks(LIMIT, $params['offset'], $params['select-by'], $params['search-book']);
             } else {
-                //потім переглянути
                 return $booksModel->getDataBooks(LIMIT, $params['offset']);
             }
         }
-        return false;
-        //return error
+        http_response_code(404);
 
     }
 
-    private function countBooks($params, $booksModel){
-       return $booksModel->getCountRowsBooks(isAllBooks($params), isBooksBySearch($params));
+    public function countBooks($params, $model){
+       return $model->getCountRowsBooks(isAllBooks($params), isBooksBySearch($params));
     }
 
 }
 
-
-
-
-
-// public function get($action) {
-//     switch ($action) {
-//         case 'books-page.php':
-//             require_once __DIR__ . '/../../views/books-page.php';
-//             break;
-//         case 'books-page.php':
-//             require_once __DIR__ . '/../../views/books-page.php';
-//             break;
-//         default:
-//             // Помилка: дія не підтримується
-//             require_once __DIR__ . '/../../views/error.php';
-//             break;
-//     }
-// }
-
-// public function post($action) {
-//     switch ($action) {
-//         case 'create':
-//             // Виконати дії для створення користувача (метод POST)
-//             echo "Створення користувача (POST)";
-//             break;
-//         case 'edit':
-//             // Виконати дії для редагування користувача (метод POST)
-//             echo "Редагування користувача (POST)";
-//             break;
-//         default:
-//             // Помилка: дія не підтримується
-//             echo "Помилка: невідома дія";
-//             break;
-//     }
-// }

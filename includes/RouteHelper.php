@@ -6,13 +6,14 @@ class RouteHelper
 {
     public const USER_OBJS = ['Books', 'Book', 'Counter'];
     public const ADMIN_OBJS = [
-          'AdminBooks', 'AdminBook', 'AdminCounter',
+          'AdminPage', 'AdminBook', 'AdminCounter',
           'Image', 'Login', 'Logout'
         ];
+
     public const ERROR_OBJS = ['Error'];
 
     public const MAIN_PAGE = "Books";
-    private static $actions = [];
+
 
     private static string $object;
     private static $params = [];
@@ -44,10 +45,7 @@ class RouteHelper
         if (isset($parsedUrl['query'])) {
             $actionPath = $parsedUrl['path'];
             self::determineObject($actionPath);
-             parse_str($parsedUrl['query'], self::$params);
-            // echo "query";
-            // echo PHP_EOL;
-            // var_dump(self::getParams());
+            parse_str($parsedUrl['query'], self::$params);
 
             return true;
         }
@@ -74,7 +72,7 @@ class RouteHelper
                 $result .= ucfirst($component);
             }
             self::setObject($result);
-            return true;
+             return true;
         }
         return false;
     }
@@ -94,18 +92,18 @@ class RouteHelper
         return self::$params;
     }
 
-    public static function isUserController(){
+    public static function isUserController()
+    {
         return in_array(self::$object, self::USER_OBJS);
-
     }
 
-    public static function isAdminController(){
+    public static function isAdminController()
+    {
         return in_array(self::$object, self::ADMIN_OBJS);
-
     }
 
-    public static function isErrorController(){
+    public static function isErrorController()
+    {
         return in_array(self::$object, self::ERROR_OBJS);
-
     }
 }

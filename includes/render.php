@@ -3,29 +3,34 @@
 const SEARCH_OPTIONS =  [
     "title" => "Название",
     "author" => "Автор",
-     "year" => "Год"
+    "year" => "Год"
 ];
 
 const LIMIT = 20;
 const OFFSET_DEFAULT = 10;
- 
-class CounterType {
-    const WANTS = 'wants';
-    const VIEWS = 'views';
+
+const LIMIT_TABLE = 10;
+const OFFSET_TABLE_DEFAULT = 10;
+
+class CounterType
+{
+    public const WANTS = 'wants';
+    public const VIEWS = 'views';
 }
 
-class SearchType {
-    const TITLE = 'title';
-    const AUTHOR = 'author';
-    const YEAR = 'author';
-}
+// class SearchType
+// {
+//     public const TITLE = 'title';
+//     public const AUTHOR = 'author';
+//     public const YEAR = 'author';
+// }
 
 function render($template, $data = null)
 {
     if ($data != null) {
-    extract($data);
- //   print_r($data);
-}
+        extract($data);
+        //   print_r($data);
+    }
     ob_start();
     require $template;
     $output = ob_get_clean();
@@ -40,7 +45,6 @@ function isAllBooks($params)
 
 function isBooksBySearch($params)
 {
-    //подумать, що робити, якщо пошук пустий або тип пошуку
     return count($params) === 3 &&
            isset($params['select-by']) &&
            in_array($params['select-by'], array_keys(SEARCH_OPTIONS)) &&
@@ -49,39 +53,37 @@ function isBooksBySearch($params)
            is_numeric($params['offset']);
 }
 
-function searchMessage($params, $countBooks) {
-    if(isBooksBySearch($params)){
-        if($params['search-book'] !== "")
-            return "Результаты по запросу {$params['search-book']}. Найдено: $countBooks";
-            else return "Запрос поиска не содержит данных.";
+function searchMessage($params, $countBooks)
+{
+    if(isBooksBySearch($params)) {
+        if($params['search-book'] !== "") {
+            return "Поиск по: " . SEARCH_OPTIONS[$_GET['select-by']] . 
+            ". Результаты по запросу: {$params['search-book']}. Найдено: $countBooks";
+        } else {
+            return "Запрос поиска не содержит данных.";
+        }
     }
 
     return false;
 }
 
-function isValidOffset($offset, $countBooks){
+function isValidOffset($offset, $countBooks)
+{
     return $offset >= 0 && $offset <= $countBooks;
 
 }
 
-function isFirstBooksPage($pre, $next){
+function isFirstBooksPage($pre, $next)
+{
     return $pre === 0 && $next === OFFSET_DEFAULT;
 }
 
-function isLastBooksPage($countBooks, $next){
+function isLastBooksPage($countBooks, $next)
+{
     return $next >= $countBooks;
-
-    //  if($countBooks<LIMIT) return true;
-    //  echo $countBooks;
-
-    //  $countPages = $countBooks / LIMIT;
-    //  $countPages = ($countBooks % LIMIT) === 0 ? $countPages : (int)$countPages + 1;
-    //  $maxOffset = $countPages * OFFSET_DEFAULT;
- 
-    //  return $next > $maxOffset? true : false;
 }
 
-function e($value) {
+function e($value)
+{
     return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
 }
-

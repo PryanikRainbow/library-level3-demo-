@@ -3,10 +3,14 @@
 namespace App\Models;
 
 use Exception;
+use Throwable;
+
 require __DIR__ . '/../../vendor/autoload.php';
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+
 
 class ConnectDB
 {
@@ -36,12 +40,10 @@ class ConnectDB
 
             } catch (Exception $e) {
                 http_response_code(500);
-                echo json_encode(['error' => 'Internal Server Error']);
-                header( 'HTTP/1.1 500 Internal Server Error' );
-                header('Content-type: application/json');
-                
-                exit();
-            }
+                // return false;
+                // http_response_code(500);
+
+            } 
         }
         
         return self::$connect;

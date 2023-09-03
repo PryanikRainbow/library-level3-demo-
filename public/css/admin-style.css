@@ -1,0 +1,99 @@
+/* Основні стилі для хедера */
+.admin-header, .admin-footer {
+    background-color: #f0f0f0; /* Нейтральний фон */
+    padding: 10px; /* Відступи від краю */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Стилі для логотипу "Ш++" */
+.admin-header-logo {
+    font-size: 36px; /* Збільшуємо розмір логотипу до 36px */
+    font-weight: bold;
+}
+
+.admin-logo-sh {
+    color: black; 
+}
+
+.admin-logo-plus {
+    color: green;
+}
+
+
+.admin-header-info {
+    text-align: right;
+}
+
+.admin-username {
+    margin-right: 10px; 
+}
+
+.admin-logout-button {
+    background-color: #333; 
+    color: white; 
+    padding: 5px 10px;
+    text-decoration: none;
+}
+
+.admin-logout-button:hover {
+    background-color: #555; 
+}
+
+.admin-footer {
+    
+        background-color: #f0f0f0; /* Нейтральний фон */
+        padding: 10px; /* Відступи від краю */
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    
+}
+
+.form-group-sm {
+    margin-bottom: 10px; 
+}
+
+.container-sm {
+    max-width: 50% !important;
+}
+
+.form-control-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    border-radius: 0.2rem;
+}
+
+.rounded-container {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    background-color: #f7f7f7;
+}
+
+
+.container-space {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+/* Додаткові стилі для сторінки з інформацією про книжку */
+.book-info-container {
+    display: flex;
+}
+
+.book-info-details {
+    flex: 1;
+    padding-right: 20px;
+}
+
+.book-info-image {
+    flex: 1;
+    text-align: center;
+}
+
+.book-info-image img {
+    max-width: 100%;
+}

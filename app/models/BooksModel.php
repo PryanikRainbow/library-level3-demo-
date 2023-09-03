@@ -4,12 +4,12 @@ namespace App\Models;
 
 require __DIR__ . '/../../vendor/autoload.php';
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 
 class BooksModel
 {
-    public const SELECT_BOOKS = "SELECT books.id, books.img, books.title, GROUP_CONCAT(authors.author SEPARATOR ', ') AS author
+    private const SELECT_BOOKS = "SELECT books.id, books.img, books.title, GROUP_CONCAT(authors.author SEPARATOR ', ') AS author
     FROM books
     JOIN books_authors ON books.id = books_authors.book_id
     JOIN authors ON books_authors.author_id = authors.id
@@ -23,18 +23,23 @@ class BooksModel
         try {
             $db = ConnectDB::getInstance();
 
+            // if ($db === null) {
+            //     http_response_code(500);
+            //     return false;
+            // }
+
             if ($searchType === null || ($searchType !== null && $searchBook === '')) {
 
                 $stmt = $db->prepare(self::SELECT_BOOKS);
                 $stmt->bind_param("ii", $limit, $offset);
             } else {
-                $field = ($searchType === 'title' || $searchType === 'year') ? "books.$searchType" : "authors.$searchType";
+                $field = in_array($searchType, ['title', 'year']) ? "books.$searchType" : "authors.$searchType";
 
                 $querySearch = "SELECT books.id, books.img, books.title, GROUP_CONCAT(authors.author SEPARATOR ', ') AS author
                 FROM books
                 JOIN books_authors ON books.id = books_authors.book_id
                 JOIN authors ON books_authors.author_id = authors.id
-                WHERE " . $field . " LIKE CONCAT('%', ?, '%')
+                WHERE {$field} LIKE CONCAT('%', ?, '%')
                 GROUP BY books.id
                 LIMIT ? OFFSET ?";
 
@@ -50,9 +55,11 @@ class BooksModel
             }
 
         } catch (\Exception $e) {
-            echo $e;
             http_response_code(500);
             return false;
+        } catch(\Throwable $t) {
+            echo "jkj";
+            exit();
         }
     }
 
@@ -65,10 +72,19 @@ class BooksModel
                 $result = $db->query(self::COUNT_ALL_BOOKS);
             } elseif ($isBooksBySearch === true) {
                 $searchType = $_GET['select-by'];
-                $searchBook = $_GET['search-book'];
+                $searchBook = "%{$_GET['search-book']}%";
                 $table = ($searchType === 'title' || $searchType === 'year') ? 'books' : 'authors';
+                $field = in_array($searchType, ['title', 'year']) ? "books.$searchType" : "authors.$searchType";
 
-                $query = "SELECT COUNT(*) FROM $table WHERE $searchType LIKE CONCAT('%', ?, '%');";
+                // $query = "SELECT COUNT(*) FROM $table WHERE $searchType LIKE ? ;";
+
+                $query = "SELECT COUNT(books.id) 
+                FROM books
+                JOIN books_authors ON books.id = books_authors.book_id
+                JOIN authors ON books_authors.author_id = authors.id
+                WHERE {$field} LIKE CONCAT('%', ?, '%')
+                GROUP BY books.id";
+
                 $result = $db->prepare($query);
 
                 $result->bind_param("s", $searchBook);
@@ -76,41 +92,20 @@ class BooksModel
                 $result = $result->get_result();
             }
 
-            if (isset($result) && $result && $result->num_rows === 1) {
-                $row = $result->fetch_row();
+            if (isset($result) && $result) {
 
-                return (int)$row[0];
+                if($result->num_rows === 1) {
+                    $row = $result->fetch_row();
+
+                    return (int)$row[0];
+                }
+                 
+                return $result->num_rows;
             }
-            
+
         } catch(\Exception $e) {
-            echo $e;
             http_response_code(500);
             return false;
         }
     }
-
 }
-
-
-// $dataBooks = getDataBooks();
-// $dataBooksArray = [];
-
-// while($row = $dataBooks->fetch_assoc()) {
-//     //в масив додаємо масив асоціативних масивів(або пар)
-//     $dataBooksArray[] = [
-//         "img" => $row["img"],
-//         "title" => $row["title"],
-//         "author" => $row["author"]
-//     ];
-// }
-
-// print_r($dataBooksArray);
-
-
-// if ($dataBooks->num_rows > 0) {
-//     while ($row = $dataBooks->fetch_assoc()) {
-//       echo   $row["title"] . " " . $row["author"] . " " . $row["img"];
-//     }
-// } else {
-//     echo "Немає результатів";
-// }
