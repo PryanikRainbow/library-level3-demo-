@@ -22,7 +22,7 @@ $route = new \Includes\RouteHelper();
 // echo require( __DIR__ . '/admin/views/admin-books-page_test.php');
 
 
-
+//спочатку query? норм
 if ($route::simpleRoute("/", $requestURI)) {
     $userController->defineController($route::getObject(), ["offset" => 0]);
 } elseif ($route::simpleRoute('/counter/', $requestURI)) {
@@ -33,9 +33,18 @@ if ($route::simpleRoute("/", $requestURI)) {
     $object = $route::getObject();
 
     $userController->defineController($route::getObject(), $route::getParams());
-} elseif($route::simpleRoute("/admin/page/", $requestURI)) {
+}   
+elseif($route::queryRoute($requestURI) && $route::isAdminController()) {
+    // echo "query";
+    $adminController->defineController($route::getObject(), $route::getParams());
+
+} 
+elseif($route::simpleRoute("/admin/page/", $requestURI)) {
+    // echo "simple+off";
+    // var_dump($route::getParams());
     $adminController->defineController($route::getObject(), ["offset" => 0]);
-}  else {
+}
+else {
     http_response_code(404);
     $errorController->defineController($route::ERROR_OBJS[0]);
 }

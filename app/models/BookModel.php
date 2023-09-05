@@ -10,7 +10,8 @@ class BookModel
     JOIN `authors` ON books_authors.author_id = authors.id
     WHERE books.id = ?
     GROUP BY books.id";
-
+    
+    //change
     public function getDataBook($id)
     {
         try {

@@ -58,7 +58,7 @@ class BooksModel
             http_response_code(500);
             return false;
         } catch(\Throwable $t) {
-            echo "jkj";
+            http_response_code(500);
             exit();
         }
     }

@@ -79,9 +79,10 @@
     margin-bottom: 20px;
 }
 
-/* Додаткові стилі для сторінки з інформацією про книжку */
-.book-info-container {
-    display: flex;
+.admin-info-book {
+    text-align: center; /* text-center */
+    display: flex; /* d-flex */
+    justify-content: center; /* justify-content-center */
 }
 
 .book-info-details {

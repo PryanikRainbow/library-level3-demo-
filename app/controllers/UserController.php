@@ -101,8 +101,8 @@ class UserController extends Controller
 
     }
 
-    public function countBooks($params, $model){
-       return $model->getCountRowsBooks(isAllBooks($params), isBooksBySearch($params));
+    public function countBooks($params, $userModel, $adminModel=null){
+       return $userModel->getCountRowsBooks(isAllBooks($params, $adminModel), isBooksBySearch($params));
     }
 
 }

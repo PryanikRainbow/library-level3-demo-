@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
+<!-- <head>
     <title>Добавить книгу</title>
-</head>
+</head> -->
 
 <body>
     <div class="container mt-5">
@@ -24,7 +24,7 @@
                 <?php foreach ($dataBooks as $dataBook): ?>
                 <tr>
                     <td>
-                        <input type="checkbox" class="delete-checkbox" value="<?php echo $i ?>">
+                        <input type="checkbox" class="delete-checkbox" value="<?php // echo $i ?>">
                     </td>
                     <td><?php echo $dataBook['id'] ?></td>
                     <td><?= e($dataBook['title']) ?></td>
@@ -33,7 +33,7 @@
                     <td><?= e($dataBook['viewsCounter']) ?></td>
                     <td><?= e($dataBook['wantsCounter']) ?></td>
                     <td>
-                        <button class="btn"><i class="fas fa-eye"></i></button>
+                    <a href="/admin/page/?id=<?= $dataBook['id'] ?>&action=view&offset=0" class="btn"><i class="fas fa-eye"></i></a>
                     </td>
                 </tr>
                 <?php endforeach; ?>
@@ -41,7 +41,7 @@
         </table>
         <button class="btn"><i class="fa fa-trash"></i></button>
 
-        <nav aria-label="Page navigation example">
+        <!-- <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
                 <li class="page-item disabled">
                     <a class="page-link">Previous</a>
@@ -53,49 +53,55 @@
                     <a class="page-link" href="#">Next</a>
                 </li>
             </ul>
-        </nav>
+        </nav> -->
+
     </div>
-    
-    <!-- <div class="container mt-3 text-center d-flex justify-content-center">
+
+    <?php if (isset($dataConteinerBook)) : ?>
+    <div class="admin-book-info container mt-3 text-center d-flex justify-content-center">
         <div class="rounded-container">
+        <div class="d-flex justify-content-end"> 
+        <a href="/admin/page/?offset=0" class="btn btn-close"></a>
+        </div>
             <div class="row">
                 <div class="col-md-6">
-                    <h2>Інформація про книжку</h2>
+                    <h2>Информация о книге</h2>
                     <table class="table table-striped">
                         <tbody>
                             <tr>
-                                <th>Заголовок</th>
-                                <td>Назва книги</td>
+                                <th>Название</th>
+                                <td><?= e($dataConteinerBook['title'])?></td>
                             </tr>
                             <tr>
                                 <th>Автор</th>
-                                <td>Автор книги</td>
+                                <td><?= e($dataConteinerBook['author'])?></td>
                             </tr>
                             <tr>
-                                <th>Рік</th>
-                                <td>Рік видання</td>
+                                <th>Год</th>
+                                <td><?= e($dataConteinerBook['year'])?></td>
                             </tr>
                             <tr>
-                                <th>Опис</th>
-                                <td>Опис книги</td>
+                                <th>Описание</th>
+                                <td><?= e($dataConteinerBook['description']) ?> </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
                 <div class="col-md-6">
                     <div class="text-center">
-                        <img src="шлях_до_зображення.jpg" alt="Зображення книги" class="img-thumbnail">
+                        <img src="/public/images/<?= e($dataConteinerBook['img']) ?> " alt="Зображення книги" class="img-thumbnail">
                     </div>
                 </div>
             </div>
         </div>
-    </div> -->
+    </div>
+    <?php endif; ?>
 
     <head>
         <title>Добавить книгу</title>
     </head>
     <div class="container-sm mt-5 rounded-container">
-        <h2>Додати Книгу</h2>
+        <h2>Добавить книгу</h2>
         <form action="додати_книгу.php" method="POST" enctype="multipart/form-data">
             <div class="row">
                 <div class="col-md-6">
@@ -105,7 +111,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="year" class="form-label">Год</label>
-
+                        <input type="number" class="form-control form-control-sm" id="year" name="year" pattern="[0-9]*" value="1991">
                     </div>
                     <?php for ($i = 1; $i <= 3; $i++) : ?>
                     <div class="mb-3">
