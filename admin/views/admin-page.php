@@ -24,7 +24,7 @@
                 <?php foreach ($dataBooks as $dataBook): ?>
                 <tr>
                     <td>
-                        <input type="checkbox" class="delete-checkbox" value="<?php // echo $i ?>">
+                        <input type="checkbox" class="delete-checkbox" value="<?php // echo $i?>">
                     </td>
                     <td><?php echo $dataBook['id'] ?></td>
                     <td><?= e($dataBook['title']) ?></td>
@@ -33,7 +33,7 @@
                     <td><?= e($dataBook['viewsCounter']) ?></td>
                     <td><?= e($dataBook['wantsCounter']) ?></td>
                     <td>
-                    <a href="/admin/page/?id=<?= $dataBook['id'] ?>&action=view&offset=0" class="btn"><i class="fas fa-eye"></i></a>
+                    <a href="/admin/page/?id=<?= $dataBook['id'] ?>&action=view&page=<?= $page ?>" class="btn"><i class="fas fa-eye"></i></a>
                     </td>
                 </tr>
                 <?php endforeach; ?>
@@ -41,19 +41,35 @@
         </table>
         <button class="btn"><i class="fa fa-trash"></i></button>
 
-        <!-- <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center">
-                <li class="page-item disabled">
-                    <a class="page-link">Previous</a>
+        <ul class="pagination justify-content-center">
+           <?php
+               $prevPage = ($page > 1) ? ($page - 1) : false;
+               $nextPage = ($page < $countPages) ? ($page + 1) : false;
+               $currentLink = !isset($dataConteinerBook) ? "?page=" : "?id={$id}&action=view&page="
+            ?>
+
+            <li class="page-item <?= ($prevPage === false) ? 'disabled' : '' ?>">
+               <?php if ($prevPage !== false): ?>
+                    <a class="page-link" href= "<?=$currentLink . $prevPage ?>">Previous</a>
+                <?php else: ?>
+                    <span class="page-link">Previous</span>
+                <?php endif; ?>
+            </li>
+
+           <?php for ($i = 1; $i <= $countPages; $i++): ?>
+                <li class="page-item <?= ($i === $page) ? 'active' : '' ?>">
+                    <a class="page-link" href="<?=$currentLink . $i ?>"><?= $i ?></a>
                 </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#">Next</a>
-                </li>
-            </ul>
-        </nav> -->
+            <?php endfor; ?>
+
+           <li class="page-item <?= ($nextPage === false) ? 'disabled' : '' ?>">
+                <?php if ($nextPage !== false): ?>
+                   <a class="page-link" href="<?= $currentLink . $nextPage ?>">Next</a>
+                <?php else: ?>
+                    <span class="page-link">Next</span>
+                <?php endif; ?>
+           </li>
+        </ul>
 
     </div>
 
@@ -61,7 +77,7 @@
     <div class="admin-book-info container mt-3 text-center d-flex justify-content-center">
         <div class="rounded-container">
         <div class="d-flex justify-content-end"> 
-        <a href="/admin/page/?offset=0" class="btn btn-close"></a>
+            <a href="/admin/page/?page=<?= $page ?>" class="btn btn-close"></a>
         </div>
             <div class="row">
                 <div class="col-md-6">

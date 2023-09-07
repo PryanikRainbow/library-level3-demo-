@@ -9,8 +9,7 @@ require_once __DIR__ . '/../../includes/call_migrations_files.php';
 
 class UserController extends Controller
 {
-
-    const USER_TEMPLATE_PATH = __DIR__ . '/../../views/';
+    public const USER_TEMPLATE_PATH = __DIR__ . '/../../views/';
 
     public function defineController($obj, $params = null)
     {
@@ -84,7 +83,7 @@ class UserController extends Controller
 
     private function selectDataBooks($params, $booksModel)
     {
-        if(isAllBooks($params)) {
+        if($this->isAllBooks($params)) {
             // if (empty($params['offset'])) {
             //     $params['offset'] = 0;
             // }
@@ -101,9 +100,14 @@ class UserController extends Controller
 
     }
 
-    public function countBooks($params, $userModel, $adminModel=null){
-       return $userModel->getCountRowsBooks(isAllBooks($params, $adminModel), isBooksBySearch($params));
+    public function isAllBooks($params)
+    {
+        return  count($params) === 1 && isset($params['offset']) && is_numeric($params['offset']);
+    }
+
+    public function countBooks($params, $userModel)
+    {
+        return $userModel->getCountRowsBooks($this->isAllBooks($params), isBooksBySearch($params));
     }
 
 }
-

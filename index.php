@@ -42,7 +42,7 @@ elseif($route::queryRoute($requestURI) && $route::isAdminController()) {
 elseif($route::simpleRoute("/admin/page/", $requestURI)) {
     // echo "simple+off";
     // var_dump($route::getParams());
-    $adminController->defineController($route::getObject(), ["offset" => 0]);
+    $adminController->defineController($route::getObject(), ["page" => 1]);
 }
 else {
     http_response_code(404);

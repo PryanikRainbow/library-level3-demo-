@@ -14,6 +14,7 @@ class AdminController
 
     public function defineController($obj, $params)
     {
+        $this->basicAut();
         $action = '';
         if ($obj === "AdminPage") {
             $action = "print$obj";
@@ -35,25 +36,26 @@ class AdminController
         $booksModel = new \App\Models\BooksModel();
         $userContoller = new UserController();
         $adminModel = new \App\Models\AdminModel();
+        var_dump($this->isOpenBookInfo($params, $booksModel, $adminModel));
 
-        if (isAllBooks($params) && http_response_code() === 200 &&
-            isValidOffset($params['offset'], $userContoller->countBooks($params, $booksModel))
-        ) {
-            $offset = $params['offset'];
-            $pre = $offset >= OFFSET_DEFAULT ? $offset - OFFSET_DEFAULT : 0;
-            $dataBooks = $adminModel->getDataTableBooks(LIMIT_TABLE, $offset);
+        if ($this->isAllBooks($params, $booksModel, $adminModel) && http_response_code() === 200) {
+            // $offset = $params['offset'];
+            // $pre = $offset >= OFFSET_DEFAULT ? $offset - OFFSET_DEFAULT : 0;
+            // $dataBooks = $adminModel->getDataTableBooks(LIMIT_TABLE, $offset);
+            $countBooks = $booksModel->getCountRowsBooks(true, isBooksBySearch($params));
 
 
             $dataTemplate = [
-                'dataBooks' => $dataBooks,
-                'countBooks' => $userContoller->countBooks($params, $booksModel),
-                'currentPage' => $userContoller->countBooks($params, $booksModel)/LIMIT_TABLE
+                'dataBooks' =>  $adminModel->getDataTableBooks(LIMIT_TABLE, $this->offset($params['page'])),
+                'countBooks' => $countBooks,
+                'page' => $params['page'],
+                'countPages' => ceil($countBooks / OFFSET_TABLE_DEFAULT)
                 // 'isOpenBookInfo' => isOpenBookInfo($params),
                 // 'dataConteinerBook' => $dataConteinerBook,
 
             ];
 
-            if (isOpenBookInfo($params) && $adminModel->checkExistsID($params['id'])) {
+            if ($this->isOpenBookInfo($params, $booksModel, $adminModel) && $adminModel->checkExistsID($params['id'])) {
                 $dataTemplate['dataConteinerBook'] = $adminModel->getBookInfo($params['id']);
                 $dataTemplate['id'] = $params['id'];
             }
@@ -92,4 +94,59 @@ class AdminController
         echo 'deleteBook';
     }
 
+    private function isAllBooks($params, $booksModel = null, $adminModel = null)
+    {
+        return (count($params) === 1 && isset($params['page'])
+        && is_numeric($params['page'])
+        && $this->isValidPage($params, $booksModel)) ||
+        ($this->isOpenBookInfo($params, $booksModel, $adminModel));
+    }
+
+    private function isOpenBookInfo($params, $booksModel, $adminModel)
+    {
+        // var_dump($params);
+        return count($params) === 3 &&
+        isset($params['action']) && $params['action'] === 'view' &&
+        isset($params['id']) &&
+        is_numeric($params['id']) &&
+        $adminModel !== null &&
+        $adminModel->checkExistsID($params['id']) &&
+        isset($params['page']) &&
+        is_numeric($params['page']) &&
+        $this->isValidPage($params, $booksModel);
+    }
+
+    private function isValidPage($params, $booksModel)
+    {
+        $page = $params['page'];
+        $offset = $this->offset($page);
+
+        return $offset >= 0 &&
+        $offset <= $booksModel->getCountRowsBooks(true, isBooksBySearch($params));
+    }
+
+    private function offset($page)
+    {
+        return OFFSET_TABLE_DEFAULT * ($page - 1);
+    }
+
+    //https://gist.github.com/rchrd2/c94eb4701da57ce9a0ad4d2b00794131
+    private function basicAut(){
+        $userData = file_get_contents('/etc/nginx/.htpasswd');
+        [$AUTH_USER, $AUTH_PASS] = explode(":", $userData, 2);
+        // $AUTH_USER = 'admin';
+        // $AUTH_PASS = 'admin';
+        header('Cache-Control: no-cache, must-revalidate, max-age=0');
+        $hasSuppliedCredentials = !(empty($_SERVER['PHP_AUTH_USER']) && empty($_SERVER['PHP_AUTH_PW']));
+        $isNotAuthenticated = (
+            !$hasSuppliedCredentials ||
+            $_SERVER['PHP_AUTH_USER'] != $AUTH_USER ||
+            $_SERVER['PHP_AUTH_PW']   != $AUTH_PASS
+        );
+        if ($isNotAuthenticated) {
+            header('HTTP/1.1 401 Authorization Required');
+            header('WWW-Authenticate: Basic realm="Access denied"');
+            exit;
+        }
+    }
 }

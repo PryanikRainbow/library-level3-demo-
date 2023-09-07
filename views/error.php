@@ -1,3 +1,22 @@
+<?php
+    // header("Content-type: application/json; charset=utf-8");
+
+    // const STATUS_MESSAGES =  [
+    //     400 => "Bad Request",
+    //     401 => "Unauthorized",
+    //     404 => "Not Found",
+    //     500 => "Internal Server Error"
+    // ];
+
+    // $statusCode = http_response_code();
+    // var_dump(["error" => STATUS_MESSAGES[$statusCode]]);
+    echo "hhhhhh";
+
+    // echo json_encode(["error" => STATUS_MESSAGES[$statusCode]]);
+    exit
+?>
+
+<!-- 
 <!DOCTYPE html>
 <html lang="ru">
 
@@ -59,3 +78,4 @@
 </body>
 
 </html>
+ -->
