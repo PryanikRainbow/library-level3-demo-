@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-abstract class Controller
+class Controller
 {
-    public abstract function defineController($obj, $params = null);
+
 }

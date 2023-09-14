@@ -2,11 +2,10 @@
 
 namespace App\Models;
 
-use Exception;
-use Throwable;
-
 require __DIR__ . '/../../vendor/autoload.php';
 
+use Exception;
+use Throwable;
 
 // error_reporting(E_ALL);
 // ini_set('display_errors', 1);
@@ -36,13 +35,10 @@ class ConnectDB
                 self::$connect = new \mysqli(self::SERVER_NAME, self::USER_NAME, self::PASSWORD);
                 self::$connect->multi_query(file_get_contents(__DIR__ . ' /../../db/db_books.sql'));
                 while (self::$connect->next_result()) {;} 
-                callMigrations();
-
             } catch (Exception $e) {
                 http_response_code(500);
-                // return false;
-                // http_response_code(500);
-
+            } catch (Throwable $t) {
+                http_response_code(500);
             } 
         }
         

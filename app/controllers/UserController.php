@@ -2,112 +2,148 @@
 
 namespace App\Controllers;
 
+use App\Models\BooksModel;
+use Exception;
+
 require __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/../../includes/render.php';
-require_once __DIR__ . '/../../includes/call_migrations_files.php';
-
+require_once __DIR__ . '/../../includes/template-functions.php';
+require_once __DIR__ . '/../public/public-constants.php';
 
 class UserController extends Controller
 {
-    public const USER_TEMPLATE_PATH = __DIR__ . '/../../views/';
+    private $booksModel;
 
-    public function defineController($obj, $params = null)
+    public const USER_TEMPLATE_PATH = __DIR__ . '/../../views/';
+    public const OFFSET_DEFAULT = 10;
+
+    public function __construct()
     {
-        $action = "print$obj";
-        return method_exists($this, $action)
-            ? $this->$action($action, $params)
-            : render(self::USER_TEMPLATE_PATH . '/error.php');
+        $this->booksModel = new BooksModel();
     }
 
-    private function printBooks($action, $params)
+    public function printBooks($params)
     {
-        $booksModel = new \App\Models\BooksModel();
+        $this->isValidBooksPageParams($params);
 
-        $dataBooks = $this->selectDataBooks($params, $booksModel);
+        $this->isValidOffset(
+            $params,
+            $this->booksModel->getCountRowsBooks($this->isParamsSelectBySearch($params))
+        );
 
-        if (http_response_code() === 200 &&
-            isValidOffset($params['offset'], $this->countBooks($params, $booksModel))
-        ) {
+        $offset = (int)$params['offset'];
 
-            $offset = $params['offset'];
-            $pre = $offset >= OFFSET_DEFAULT ? $offset - OFFSET_DEFAULT : 0;
+        if($this->isParamsTotalSelect($params)) {
+            $dataBooks = $this->booksModel->getDataTotalBooks($offset);
+        } else {
+            $dataBooks = $this->booksModel->getDataBooksBySearch($offset, $params['select-by'], $params['search-book']);
+        }
 
-            $next = $offset + OFFSET_DEFAULT;
-            $countBooks = $this->countBooks($params, $booksModel);
-            echo $countBooks;
+        $countBooks = $this->booksModel->getCountRowsBooks($this->isParamsSelectBySearch($params));
 
+        try {
             $dataTemplate = [
                 'dataBooks' => $dataBooks,
-                'pre' => $pre,
-                'next' => $next,
-                'isFirstPage' => isFirstBooksPage($pre, $next),
-                'isLastPage' => isLastBooksPage($countBooks, $next),
-                'searchMessage' => searchMessage($params, $countBooks)
+                'offset' => $offset,
+                'pre' => $offset >= self::OFFSET_DEFAULT ? $offset - self::OFFSET_DEFAULT : 0,
+                'next' => $offset + self::OFFSET_DEFAULT,
+                'countBooks' => $countBooks,
+                'isBooksBySearch' => $this->isParamsSelectBySearch($params),
             ];
 
             render(self::USER_TEMPLATE_PATH . '/books-page.php', $dataTemplate);
-        } else {
-            render(self::USER_TEMPLATE_PATH . '/error.php');
-        }
-
-    }
-
-    private function printBook($action, $params)
-    {
-        $bookModel = new \App\Models\BookModel();
-        $dataBook = $bookModel->getDataBook($params[0]);
-        if ($dataBook !== false) {
-            render(self::USER_TEMPLATE_PATH . 'book-page.php', $dataBook);
-        } else {
-            render(self::USER_TEMPLATE_PATH . '/error.php');
+        } catch(Exception $e) {
+            http_response_code(500);
+            require_once(__DIR__ . '/../../views/error.php');
         }
     }
 
-    private function printCounter($action, $params)
+    public function printBookByID($params)
     {
-        if (isset($_POST['id']) && isset($_POST['counter-type']) &&
-           count($_POST) === 2
-        ) {
+        $dataBook = $this->booksModel->getDataBook($params[0]);
+
+        try {
+            if ($dataBook !== false && !empty($params)) {
+                render(self::USER_TEMPLATE_PATH . 'book-page.php', $dataBook);
+            } else {
+                http_response_code(404);
+                require_once(__DIR__ . '/../../views/error.php');
+            }
+        } catch(Exception $e) {
+            http_response_code(500);
+            require_once(__DIR__ . '/../../views/error.php');
+        }
+    }
+
+    //empty
+    public function printCounter()
+    {
+        try {
             $id = $_POST['id'];
             $counterType = $_POST['counter-type'];
 
-            $bookModel = new \App\Models\BookModel();
-            $bookModel->incrementCounter($id, $counterType);
-            $newCounter = $bookModel->getCounter($id, $counterType);
+            $this->booksModel->incrementCounter($id, $counterType);
+            $newCounter = $this->booksModel->getCounter($id, $counterType);
 
             echo $newCounter;
+        } catch(Exception $e) {
+            http_response_code(500);
+            require_once(__DIR__ . '/../../views/error.php');
+        }
+    }
+
+    ///////////////////////////check params////////////////////////////////
+
+    private static function isValidBooksPageParams(&$params)
+    {
+        if (self::isParamsTotalSelect($params) || (self::isParamsSelectBySearch($params))) {
+            return true;
+        }
+
+        http_response_code(500);
+        require_once(__DIR__ . '/../../views/error.php');
+    }
+
+    private static function isParamsTotalSelect(&$params)
+    {
+        if(empty($params)) {
+            $params = ['offset' => 0];
+            return true;
+        }
+
+        if(count($params) === 1 && isset($params['offset'])
+         && is_numeric($params['offset'])) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private static function isParamsSelectBySearch($params)
+    {
+        return count($params) === 3 && self::isValidSearcType($params) &&
+               isset($params['search-book']) &&
+               isset($params['offset']) &&
+               is_numeric($params['offset']);
+    }
+
+    private static function isValidOffset($params, $countBooks)
+    {
+        $offset = $params['offset'];
+        if($offset >= 0 && $offset <= $countBooks) {
+            return true;
         } else {
-            render(self::USER_TEMPLATE_PATH . '/error.php');
+            http_response_code(404);
+
+            echo json_encode(["error" => "Not Found"]);
+            exit();
         }
     }
 
-    private function selectDataBooks($params, $booksModel)
+    private static function isValidSearcType($params)
     {
-        if($this->isAllBooks($params)) {
-            // if (empty($params['offset'])) {
-            //     $params['offset'] = 0;
-            // }
-            return $booksModel->getDataBooks(LIMIT, $params['offset']);
-        }
-        if (isBooksBySearch($params)) {
-            if($params['search-book'] !== '') {
-                return $booksModel->getDataBooks(LIMIT, $params['offset'], $params['select-by'], $params['search-book']);
-            } else {
-                return $booksModel->getDataBooks(LIMIT, $params['offset']);
-            }
-        }
-        http_response_code(404);
-
-    }
-
-    public function isAllBooks($params)
-    {
-        return  count($params) === 1 && isset($params['offset']) && is_numeric($params['offset']);
-    }
-
-    public function countBooks($params, $userModel)
-    {
-        return $userModel->getCountRowsBooks($this->isAllBooks($params), isBooksBySearch($params));
+        return isset($params['select-by']) &&
+        in_array($params['select-by'], array_keys(SEARCH_OPTIONS));
     }
 
 }

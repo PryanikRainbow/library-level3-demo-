@@ -8,9 +8,17 @@
     <section id="main" class="main-wrapper">
 
        <?php 
-       if ($searchMessage !== false){
-        echo '<div class="searchMessage">' . e($searchMessage) . '</div>';
-       }
+           if ($isBooksBySearch){
+                if($_GET['search-book'] !== "") {
+                    echo 
+                    '<div class="searchMessage">' .
+                    "Поиск по: " . SEARCH_OPTIONS[$_GET['select-by']] . 
+                    ". Результаты по запросу: " . e($_GET['search-book']) . ". Найдено: $countBooks"  . 
+                    '</div>';
+                } else {
+                    echo '<div class="searchMessage">' ."Запрос поиска не содержит данных." . '</div>';
+                }
+            }
        ?>
     
         <div class="container">
@@ -26,19 +34,19 @@
         </div>
 
         <center>
-           <?php if ($searchMessage != false) : ?>
+           <?php if ($isBooksBySearch) : ?>
                <a href="/?select-by=<?= urlencode($_GET['select-by']) ?>&search-book=<?= urlencode($_GET['search-book']) ?>&offset=<?= $pre ?>">
-                    <button type="button" class="details btn btn-success" <?= $isFirstPage == true ? 'disabled' : '' ?>>Назад</button>
+                    <button type="button" class="details btn btn-success" <?= $offset === 0 ? 'disabled' : '' ?>>Назад</button>
                 </a>
                 <a href="/?select-by=<?= urlencode($_GET['select-by']) ?>&search-book=<?= urlencode($_GET['search-book']) ?>&offset=<?= $next ?>"> 
-                   <button type="button" class="details btn btn-success" <?= $isLastPage == true ? 'disabled' : '' ?>>Вперед</button>
+                   <button type="button" class="details btn btn-success" <?= $next >= $countBooks ? 'disabled' : '' ?>>Вперед</button>
                 </a>
             <?php else : ?>
                 <a href="/?offset=<?= urlencode($pre) ?>">
-                    <button type="button" class="details btn btn-success" <?= $isFirstPage == true ? 'disabled' : '' ?>>Назад</button>
+                    <button type="button" class="details btn btn-success" <?= $offset === 0 ? 'disabled' : '' ?>>Назад</button>
                  </a>
                  <a href="/?offset=<?= urlencode($next) ?>"> 
-                    <button type="button" class="details btn btn-success" <?= $isLastPage == true ? 'disabled' : '' ?>>Вперед</button>
+                    <button type="button" class="details btn btn-success" <?= $next >= $countBooks ? 'disabled' : '' ?>>Вперед</button>
                  </a>
              <?php endif; ?>
              </center>
