@@ -24,7 +24,7 @@ class UserController extends Controller
 
     public function printBooks($params)
     {
-        $this->isValidBooksPageParams($params);
+        static::isValidBooksPageParams($params);
 
         $this->isValidOffset(
             $params,
@@ -60,10 +60,10 @@ class UserController extends Controller
 
     public function printBookByID($params)
     {
-        $dataBook = $this->booksModel->getDataBook($params[0]);
+        $dataBook = $this->booksModel->getDataBook((int)$params[0]);
 
         try {
-            if ($dataBook !== false && !empty($params)) {
+            if ($dataBook !== NULL && !empty($params)) {
                 render(self::USER_TEMPLATE_PATH . 'book-page.php', $dataBook);
             } else {
                 http_response_code(404);
@@ -100,7 +100,7 @@ class UserController extends Controller
             return true;
         }
 
-        http_response_code(500);
+        http_response_code(404);
         require_once(__DIR__ . '/../../views/error.php');
     }
 

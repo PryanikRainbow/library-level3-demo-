@@ -1,20 +1,19 @@
-/* Основні стилі для хедера */
-.admin-header, .admin-footer {
-    background-color: #f0f0f0; /* Нейтральний фон */
-    padding: 10px; /* Відступи від краю */
+.admin-header,
+.admin-footer {
+    background-color: #f0f0f0;
+    padding: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-/* Стилі для логотипу "Ш++" */
 .admin-header-logo {
-    font-size: 36px; /* Збільшуємо розмір логотипу до 36px */
+    font-size: 36px;
     font-weight: bold;
 }
 
 .admin-logo-sh {
-    color: black; 
+    color: black;
 }
 
 .admin-logo-plus {
@@ -27,32 +26,32 @@
 }
 
 .admin-username {
-    margin-right: 10px; 
+    margin-right: 10px;
 }
 
 .admin-logout-button {
-    background-color: #333; 
-    color: white; 
+    background-color: #333;
+    color: white;
     padding: 5px 10px;
     text-decoration: none;
 }
 
 .admin-logout-button:hover {
-    background-color: #555; 
+    background-color: #555;
 }
 
 .admin-footer {
-    
-        background-color: #f0f0f0; /* Нейтральний фон */
-        padding: 10px; /* Відступи від краю */
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    
+
+    background-color: #f0f0f0;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
 }
 
 .form-group-sm {
-    margin-bottom: 10px; 
+    margin-bottom: 10px;
 }
 
 .container-sm {
@@ -80,9 +79,12 @@
 }
 
 .admin-info-book {
-    text-align: center; /* text-center */
-    display: flex; /* d-flex */
-    justify-content: center; /* justify-content-center */
+    text-align: center;
+    /* text-center */
+    display: flex;
+    /* d-flex */
+    justify-content: center;
+    /* justify-content-center */
 }
 
 .book-info-details {

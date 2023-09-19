@@ -38,7 +38,7 @@
                                 <div class="bookRow"><span class="properties">автор:</span><span id="author"><?= e($author) ?></span></div>
                                 <div class="bookRow"><span class="properties">год:</span><span id="year"><?= $year ?></span></div>
                                 <div class="bookRow"><span class="properties">страниц:</span><span id="pages"> <?= $pages ?> </span></div>
-                                <div class="bookRow"><span class="properties">isbn:</span><span id="isbn"><?= e($isbn) ?></span></div>
+                                <div class="bookRow"><span class="properties">isbn:</span><span id="isbn"><?= $isbn !== null ? e($isbn) : '' ?></span></div>
                             </div>
                         </div>
                           <div class="btnBlock col-xs-12 col-sm-12 col-md-12">

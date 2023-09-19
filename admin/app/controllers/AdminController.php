@@ -53,14 +53,17 @@ class AdminController
         }
     }
 
-    public function addBook($action, $params)
+    //
+    public function addBook()
     {
-        echo 'addBook';
+        $this->adminModel->insertBook();
+        header('Location: /admin/page/'); 
+        exit; 
     }
 
-    public function removeBook($action, $params)
+    public function removeBook()
     {
-        echo 'deleteBook';
+        var_dump($_POST);
     }
 
     //////////////////////////check params////////////////////////////////
@@ -69,6 +72,7 @@ class AdminController
     {
         if(empty($params)) {
             $params = ['page' => 1];
+            
             return true;
         }
 
@@ -76,6 +80,7 @@ class AdminController
             && is_numeric($params['page'])
             && $this->isValidPage($params, $booksModel)) ||
             ($this->isOpenBookInfo($params, $booksModel, $adminModel))) {
+
             return true;
         }
 

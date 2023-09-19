@@ -1,13 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<!-- <head>
-    <title>Добавить книгу</title>
-</head> -->
-
-
 <body>
     <div class="container mt-5">
+    <form action="/book/remove" method="POST">
         <table class="table table-success table-striped table-hover">
             <thead>
                 <tr>
@@ -25,7 +21,9 @@
                 <?php foreach ($dataBooks as $dataBook): ?>
                 <tr>
                     <td>
-                        <input type="checkbox" class="delete-checkbox" value="<?php // echo $i?>">
+                    <input type="checkbox" class="delete-checkbox" name="selectedBooks[]"
+                        value="<?= $dataBook['id'] ?>">
+                        <!-- <input type="checkbox" class="delete-checkbox" value="<?php // echo $i?>"> -->
                     </td>
                     <td><?php echo $dataBook['id'] ?></td>
                     <td><?= e($dataBook['title']) ?></td>
@@ -34,52 +32,77 @@
                     <td><?= e($dataBook['viewsCounter']) ?></td>
                     <td><?= e($dataBook['wantsCounter']) ?></td>
                     <td>
-                    <a href="/admin/page/?id=<?= $dataBook['id'] ?>&action=view&page=<?= $page ?>" class="btn"><i class="fas fa-eye"></i></a>
+                        <a href="/admin/page/?id=<?= $dataBook['id'] ?>&action=view&page=<?= $page ?>"
+                            class="btn"><i class="fas fa-eye"></i></a>
                     </td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
-        <button class="btn"><i class="fa fa-trash"></i></button>
+
+        <button class="btn" name="deleteButton" id="confirmDelModalBtn" data-bs-toggle="modal"
+            data-bs-target="#myModal">
+            <i class="fa fa-trash"></i>
+        </button>
+
+        
+
+        <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Точно ?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                   
+                        Удалить выбранные книги?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Нет</button>
+                        <button type="button" class="btn btn-danger">Да</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <ul class="pagination justify-content-center">
-           <?php
+            <?php
                $prevPage = ($page > 1) ? ($page - 1) : false;
-               $nextPage = ($page < $countPages) ? ($page + 1) : false;
-               $currentLink = !isset($dataConteinerBook) ? "?page=" : "?id={$id}&action=view&page="
+                $nextPage = ($page < $countPages) ? ($page + 1) : false;
+                $currentLink = !isset($dataConteinerBook) ? "?page=" : "?id={$id}&action=view&page="
             ?>
 
             <li class="page-item <?= ($prevPage === false) ? 'disabled' : '' ?>">
-               <?php if ($prevPage !== false): ?>
-                    <a class="page-link" href= "<?=$currentLink . $prevPage ?>">Previous</a>
+                <?php if ($prevPage !== false): ?>
+                <a class="page-link" href="<?= $currentLink . $prevPage ?>">Previous</a>
                 <?php else: ?>
-                    <span class="page-link">Previous</span>
+                <span class="page-link">Previous</span>
                 <?php endif; ?>
             </li>
 
-           <?php for ($i = 1; $i <= $countPages; $i++): ?>
-                <li class="page-item <?= ($i === $page) ? 'active' : '' ?>">
-                    <a class="page-link" href="<?=$currentLink . $i ?>"><?= $i ?></a>
-                </li>
+            <?php for ($i = 1; $i <= $countPages; $i++): ?>
+            <li class="page-item <?= ($i === $page) ? 'active' : '' ?>">
+                <a class="page-link" href="<?= $currentLink . $i ?>"><?= $i ?></a>
+            </li>
             <?php endfor; ?>
-
-           <li class="page-item <?= ($nextPage === false) ? 'disabled' : '' ?>">
+            <li class="page-item <?= ($nextPage === false) ? 'disabled' : '' ?>">
                 <?php if ($nextPage !== false): ?>
-                   <a class="page-link" href="<?= $currentLink . $nextPage ?>">Next</a>
+                <a class="page-link" href="<?= $currentLink . $nextPage ?>">Next</a>
                 <?php else: ?>
-                    <span class="page-link">Next</span>
+                <span class="page-link">Next</span>
                 <?php endif; ?>
-           </li>
+            </li>
         </ul>
-
+                </form>
     </div>
 
     <?php if (isset($dataConteinerBook)) : ?>
     <div class="admin-book-info container mt-3 text-center d-flex justify-content-center">
         <div class="rounded-container">
-        <div class="d-flex justify-content-end"> 
-            <a href="/admin/page/?page=<?= $page ?>" class="btn btn-close"></a>
-        </div>
+            <div class="d-flex justify-content-end">
+                <a href="/admin/page/?page=<?= $page ?>" class="btn btn-close"></a>
+            </div>
             <div class="row">
                 <div class="col-md-6">
                     <h2>Информация о книге</h2>
@@ -106,7 +129,8 @@
                 </div>
                 <div class="col-md-6">
                     <div class="text-center">
-                        <img src="/public/images/<?= e($dataConteinerBook['img']) ?> " alt="Зображення книги" class="img-thumbnail">
+                        <img src="/public/images/<?= e($dataConteinerBook['img']) ?> "
+                            alt="Зображення книги" class="img-thumbnail">
                     </div>
                 </div>
             </div>
@@ -114,71 +138,8 @@
     </div>
     <?php endif; ?>
 
-    <head>
-        <title>Добавить книгу</title>
-    </head>
-    <div class="container-sm mt-5 rounded-container">
-        <h2>Добавить книгу</h2>
-        <form action="додати_книгу.php" method="POST" enctype="multipart/form-data">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label for="title" class="form-label">Название</label>
-                        <input type="text" class="form-control form-control-sm" id="title" name="title" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="year" class="form-label">Год</label>
-                        <input type="number" class="form-control form-control-sm" id="year" name="year" pattern="[0-9]*" value="1991">
-                    </div>
-                    <?php for ($i = 1; $i <= 3; $i++) : ?>
-                    <div class="mb-3">
-                        <label for="author<?= $i ?>" class="form-label">Автор <?= $i ?></label>
-                        <input type="text" class="form-control form-control-sm" id="author<?= $i ?>"
-                            name="authors[]">
-                    </div>
-                    <?php endfor; ?>
-                    <div class="mb-3">
-                        <label for="description" class="form-label">Описание</label>
-                        <textarea class="form-control form-control-sm" id="description" name="description"
-                            rows="6"></textarea>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label for="image" class="form-label">Загрузить изображение</label>
-                        <input type="file" class="form-control form-control-sm" id="image" name="image">
-                    </div>
-                    <div class="mb-3">
-                        <label for="imagePreview" class="form-label">Превью изображения</label>
-                        <img src="" alt="Превью" id="imagePreview" class="img-thumbnail">
-                    </div>
-                </div>
-            </div>
-            <div class="text-center">
-                <button type="submit" class="btn btn-primary">Добавить</button>
-            </div>
+    <?php include(__DIR__ . "/add-book-container.php"); ?>
 
-        </form>
-    </div>
-
-    <div class="container-space"></div>
-
-    <script>
-        document.getElementById("image").addEventListener("change", function() {
-            const preview = document.getElementById("imagePreview");
-            const file = this.files[0];
-            const reader = new FileReader();
-
-            reader.onload = function() {
-                preview.src = reader.result;
-            }
-
-            if (file) {
-                reader.readAsDataURL(file);
-            }
-        });
-    </script>
-    
 </body>
 
 </html>
